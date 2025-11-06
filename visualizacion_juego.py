@@ -20,7 +20,7 @@ fondo = pygame.image.load("Imágenes/fondo.png") #ruta imagen
 
 #Agregando imagenes al juego
 #Agregamos al Player
-playerImg= pygame.image.load('Imágenes/angrybird.png')
+playerImg= pygame.image.load('Imágenes/pajaro.png')
 #definimos la posicion del jugador
 playerX= 120
 playerY= 425
@@ -44,7 +44,7 @@ while running:
     pygame.display.update() #actualizamos el fondo con la imagen
 
 #TERMINAR ICONO
-#FIJARSE PARTE PLAYER
+
 
 
 
