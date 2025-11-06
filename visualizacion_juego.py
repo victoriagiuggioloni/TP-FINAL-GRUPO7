@@ -12,14 +12,14 @@ screen = pygame.display.set_mode((1024,1024))
 pygame.display.set_caption("Angry Flappy Bird")
 
 #obtenemos ruta del archivo del icono
-#base_path = os.path.dirname(__file__)
-#icon_path = os.path.join(base_path, "bird.png")
+base_path = os.path.dirname(__file__)
+icon_path = os.path.join(base_path, "bird.png.png")
 
 #creamos un icono para nuestro juego
-#icon = pygame.image.load(icon_path)
+icon = pygame.image.load(icon_path)
 #cambiamos tamano de icono
-#icono = pygame.transform.scale(icon, (32,32))
-#pygame.display.set_icon(icono)
+icono = pygame.transform.scale(icon, (32,32))
+pygame.display.set_icon(icono)
 
 
 
@@ -32,7 +32,7 @@ while running:
             running = False #Se termina el loop una vez que el usuario presiona la cruz del juego
 
 #cambiamos el fondo del juego
-fondo = pygame.image.load()
+#fondo = pygame.image.load()
 
 
 
