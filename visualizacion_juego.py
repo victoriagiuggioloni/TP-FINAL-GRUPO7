@@ -11,7 +11,7 @@ screen = pygame.display.set_mode((1024,1024))
 pygame.display.set_caption("Angry Flappy Bird")
 
 #creamos un icono para nuestro juego
-icon = pygame.image.load('Imágenes/pajaro_icon.png')
+icon = pygame.image.load('Imágenes/pajaro_icono.png')
 
 
 #cambiamos el fondo del juego
@@ -19,6 +19,7 @@ icon = pygame.image.load('Imágenes/pajaro_icon.png')
 fondo = pygame.image.load("Imágenes/fondo.png") #ruta imagen
 
 #Agregando imagenes al juego
+
 #Player
 playerImg= pygame.image.load('Imágenes/pajaro.png')
 #definimos la posicion del player con sus coordenadas
@@ -51,6 +52,7 @@ while running:
     player(playerX, playerY) #llamamos la funcion del jugador asi nos aparece en el juego
     poste(posteX, posteY) #llamamos funcion poste
     pygame.display.update() #actualizamos el fondo con la imagen
+
 
 
 
