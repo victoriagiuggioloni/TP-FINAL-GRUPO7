@@ -4,7 +4,7 @@ import pygame
 pygame.init()
 
 #creamos la pantalla del juego
-screen = pygame.display.set_mode((1024,1024))
+screen = pygame.display.set_mode((1024,800))
 
 
 #cambiamos nombre del juego
@@ -24,12 +24,12 @@ fondo = pygame.image.load("Imágenes/fondo.png") #ruta imagen
 playerImg= pygame.image.load('Imágenes/pajaro.png')
 #definimos la posicion del player con sus coordenadas
 playerX= 120
-playerY= 425
+playerY= 420
 
 #Postes
 posteImg= pygame.image.load('Imágenes/postes.png')
 posteX=750
-posteY=-300 #pixeles negativos porque la imagen del poste es mas grande que la imagen del fondo
+posteY=-350 #pixeles negativos porque la imagen del poste es mas grande que la imagen del fondo
 
 
 #creamos una funcion del player del juego
