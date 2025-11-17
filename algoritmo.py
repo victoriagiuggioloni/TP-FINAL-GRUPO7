@@ -42,31 +42,40 @@ class Tubo:
         """Devuelve la posición y del centro del hueco para que el pájaro sepa dónde apuntar"""
         return self.altura_superior + pipe_gap / 2
 
+class Poblacion:
+    def __init__(self, pobl):
+        if pobl == None:
+            pobl=[]
+            for p in range(99):
+                pobl.append(Pajaro(None, 0))
+                #print(w)
+                #print(pobl)
+        self.pobl= pobl
+        
+    def ver_rendimiento(self, ):
+            #ver como hacer el codigo para que vuele
+            #devuelve una lista con los rendimientos de cada pajaro
+    def seleccion(self, ):
+        #ordenar de mayor a menor y quedarme con los 50 mejores, devuelve self.mejores
 
-
-
-
-pobl=[]
-for pajaro in range(99):
-    w=[]
-    for peso in range(6):
-        w.append(round(random.uniform(-1, 1), 2))
-    pobl.append(w)
-print(w)
-print(pobl)
-
-
-
-
-class pajaro:
-    def __init__(self, w, vy):
-        self.w0= w[0]
-        self.w1= w[1]
-        self.w2= w[2]
-        self.w3= w[3]
-        self.w4= w[4]
-        self.w5= w[5]
+    def cruzar(self, ):
+            #cruzar pajaros(self.mejores) para conseguir la nueva pobl
+        
+class Pajaro:
+    def __init__(self, w, vy, posicion): #tb deberia recibir la posicion del pajaro
+        if w==None:
+            w=[]
+            for peso in range(6):
+                w.append(round(random.uniform(-1, 1), 2))
+        self.w= w
         self.vy= vy
+        self.coordp= posicion
 
+    def aletear(self, coordp, coordt): # coord= (x, y) #coordp ya la tengo seria self.coordp
+        Dx= abs(coordp[0]- coordt[0])
+        Dy= abs(coordp[1]- coordt[1])
+        volar= self.w[0]+self.w[1]*Dy + self.w[2]*(Dy**2) + self.w[3]*Dx + self.w[4]*(Dx**2) + self.w[5]*self.vy
+        return volar
     
+
 
