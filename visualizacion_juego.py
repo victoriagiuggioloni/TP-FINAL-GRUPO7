@@ -8,7 +8,7 @@ pipe_width = 140
 pipe_gap = 200
 pipe_speed = 6
 fps = 60
-pipe_distance = 200
+pipe_distance = 250
 
 
 class Tubo:
@@ -98,7 +98,7 @@ def player(x,y): #parametros x,y para que podamos definir las posiciones que que
 
 
 
-tubos = [ Tubo(width + 50, tubo_arriba, tubo_abajo), Tubo(width + 150 + pipe_distance, tubo_arriba, tubo_abajo) ]
+tubos = [ Tubo(600, tubo_arriba, tubo_abajo), Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo) ]
 
 #Generamos el loop del juego
 running = True
@@ -116,13 +116,12 @@ while running:
         tubo.mover()
         tubo.dibujar(screen)
         if tubos[0].nuevos_tubos():
-         if tubos[0].nuevos_tubos():  # esta doble condición no aporta nada
-            distancia_min = 200
-            distancia_max = 300
-            distancia = random.randint(distancia_min, distancia_max)
-            nueva_x = 150 + distancia   # entre 350 y 450
+            # ahora el tubo[1] pasa a ser el de adelante
+            tubos[0] = tubos[2]
 
-            tubos[0] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
+            # creamos un nuevo tubo detrás, manteniendo la misma distancia
+            nueva_x = tubos[0].x + pipe_distance
+            tubos[2] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
 
     pygame.display.update() #actualizamos el fondo con la imagen
 
