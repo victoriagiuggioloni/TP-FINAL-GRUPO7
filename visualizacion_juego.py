@@ -52,7 +52,7 @@ class Tubo:
 
     def nuevos_tubos(self):
         """Elimina tubos viejos y crea nuevos a la derecha"""
-        return self.x + self.ancho < 0
+        return self.x + self.ancho < 2
     
     def centro_del_hueco(self):
         """Devuelve la posición y el centro del hueco para que el pájaro sepa dónde apuntar"""
@@ -98,7 +98,7 @@ def player(x,y): #parametros x,y para que podamos definir las posiciones que que
 
 
 
-tubos = [ Tubo(600, tubo_arriba, tubo_abajo), Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo) ]
+tubos = [ Tubo(600, tubo_arriba, tubo_abajo), Tubo(800 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(850 + 2 * pipe_distance, tubo_arriba, tubo_abajo) ]
 
 #Generamos el loop del juego
 running = True
@@ -120,7 +120,7 @@ while running:
             tubos[0] = tubos[2]
 
             # creamos un nuevo tubo detrás, manteniendo la misma distancia
-            nueva_x = tubos[0].x + pipe_distance
+            nueva_x = tubos[0].x + 600
             tubos[2] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
 
     pygame.display.update() #actualizamos el fondo con la imagen
