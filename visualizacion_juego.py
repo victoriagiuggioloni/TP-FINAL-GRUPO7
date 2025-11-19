@@ -10,6 +10,10 @@ pipe_speed = 6
 fps = 60
 pipe_distance = 250
 
+current_distance= 0
+average_distance = 0
+scroll_speed = 3
+speed = scroll_speed
 
 class Tubo:
 
@@ -103,6 +107,7 @@ tubos = [ Tubo(600, tubo_arriba, tubo_abajo), Tubo(800 + pipe_distance, tubo_arr
 #Generamos el loop del juego
 running = True
 while running:
+
     clock.tick(fps)
     for event in pygame.event.get(): #event es cualquier cosa que sucede dentro del juego
         if event.type == pygame.QUIT:
@@ -131,13 +136,42 @@ while running:
 
     
     #titulo del panel
-    font_titulo = pygame.font.SysFont("Arial", 24, bold = True)
+    font_titulo = pygame.font.SysFont("Comic Sans MS", 24, bold = True)
     titulo = font_titulo.render("GA Statistics", True, (250,250,250))
     screen.blit(titulo, (panel_x + 20, 10))
+    
     #agregamos texto dentro del panel
-    font = pygame.font.SysFont("Arial", 12)
-    texto = font.render("Generacion: ", True, (250,250,250))
-    screen.blit(texto, (panel_x + 10, 20))
+    font = pygame.font.SysFont("Arial", 14)
+    texto = font.render("Generation: ", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 60))
+
+    font = pygame.font.SysFont("Arial", 14)
+    texto = font.render("Alives: ", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 80))
+
+    font = pygame.font.SysFont("Arial", 14)
+    texto = font.render("Prev Gen 2min: ", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 100))
+
+    font = pygame.font.SysFont("Arial", 14)
+    texto = font.render(f"Speed: {scroll_speed}X ", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 120))
+
+    font = pygame.font.SysFont("Arial", 14)
+    current_distance += 1 #se le va sumando la distancia
+    texto = font.render(f"Current Distance: {current_distance} ", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 160))
+
+
+    font = pygame.font.SysFont("Arial", 14)
+    texto = font.render("Best Distance: ", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 180))
+
+    font = pygame.font.SysFont("Arial", 14)
+    texto = font.render("Avg Distance: ", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 200))
+
+    
 
     pygame.display.update() #actualizamos el fondo con la imagen
 
