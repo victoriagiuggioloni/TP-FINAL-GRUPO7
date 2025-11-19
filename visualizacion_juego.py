@@ -123,6 +123,22 @@ while running:
             nueva_x = tubos[0].x + 600
             tubos[2] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
 
+    #agregamos panel negro a la derecha
+    panel_width = 250 #ancho del panel
+    panel_x = width - panel_width #lo posicionamos al borde a la derecha
+
+    pygame.draw.rect(screen, (0,0,0), (panel_x,0, panel_width, height))
+
+    
+    #titulo del panel
+    font_titulo = pygame.font.SysFont("Arial", 24, bold = True)
+    titulo = font_titulo.render("GA Statistics", True, (250,250,250))
+    screen.blit(titulo, (panel_x + 20, 10))
+    #agregamos texto dentro del panel
+    font = pygame.font.SysFont("Arial", 12)
+    texto = font.render("Generacion: ", True, (250,250,250))
+    screen.blit(texto, (panel_x + 10, 20))
+
     pygame.display.update() #actualizamos el fondo con la imagen
 
 pygame.quit()
