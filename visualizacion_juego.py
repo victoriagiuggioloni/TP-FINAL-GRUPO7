@@ -75,7 +75,11 @@ pygame.display.set_caption("Angry Flappy Bird")
 
 #creamos un icono para nuestro juego
 icon = pygame.image.load('Imágenes/pajaro_icono.png')
+
 pygame.display.set_icon(icon) #actualizamos el icono
+
+perdio = pygame.image.load('Imágenes/game_over.png')   #texto para cuando no quedan pájaros vivos
+game_over = False  
 
 
 #cambiamos el fondo del juego
@@ -130,6 +134,9 @@ while running:
     screen.blit(fondo,(0,0)) #dibuja el fondo
 
     player(playerX, playerY) #llamamos la funcion del jugador asi nos aparece en el juego
+
+    #player_hit = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height()) #clalculo el hitbox del pajaro
+
     
     for tubo in tubos:
         tubo.mover()
@@ -139,8 +146,11 @@ while running:
             tubos[0] = tubos[2]
 
             # creamos un nuevo tubo atras, manteniendo la distancia
-            nueva_x = tubos[0].x + 600
+            nueva_x = tubos[0].x + 650
             tubos[2] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
+        
+            
+            
 
     #agregamos panel negro a la derecha
     panel_width = 250 #ancho del panel
