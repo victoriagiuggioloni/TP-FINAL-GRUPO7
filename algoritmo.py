@@ -26,11 +26,15 @@ class Poblacion:
     def ver_rendimiento(self, ):
             #ver como hacer el codigo para que vuele
             #devuelve una lista con los rendimientos de cada pajaro
+
     def seleccion(self, ):
+        pass
         #ordenar de mayor a menor y quedarme con los 50 mejores, devuelve self.mejores
 
     def cruzar(self, ):
             #cruzar pajaros(self.mejores) para conseguir la nueva pobl
+        
+        
         
 class Pajaro:
     def __init__(self, w, vy, posicion): #tb deberia recibir la posicion del pajaro
