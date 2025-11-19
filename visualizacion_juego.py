@@ -115,15 +115,14 @@ while running:
     for tubo in tubos:
         tubo.mover()
         tubo.dibujar(screen)
-    if tubos[0].nuevos_tubos():
         if tubos[0].nuevos_tubos():
-           distancia_min = 200
-           distancia_max = 300
-           distancia = random.randint(distancia_min, distancia_max)
-           #empezamos en el borde
-           nueva_x = 150 + distancia
+         if tubos[0].nuevos_tubos():  # esta doble condición no aporta nada
+            distancia_min = 200
+            distancia_max = 300
+            distancia = random.randint(distancia_min, distancia_max)
+            nueva_x = 150 + distancia   # entre 350 y 450
 
-           tubos[0] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
+            tubos[0] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
 
     pygame.display.update() #actualizamos el fondo con la imagen
 
