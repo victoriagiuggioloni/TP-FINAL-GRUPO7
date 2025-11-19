@@ -135,10 +135,10 @@ while running:
         tubo.mover()
         tubo.dibujar(screen)
         if tubos[0].nuevos_tubos():
-            # ahora el tubo[1] pasa a ser el de adelante
+            # ahora el tubo[2] pasa a ser el de adelante
             tubos[0] = tubos[2]
 
-            # creamos un nuevo tubo detrás, manteniendo la misma distancia
+            # creamos un nuevo tubo atras, manteniendo la distancia
             nueva_x = tubos[0].x + 600
             tubos[2] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
 
