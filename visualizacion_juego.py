@@ -90,6 +90,9 @@ playerImg= pygame.image.load('Imágenes/pajaro.png')
 playerX= 120
 playerY= 420
 
+vel_y = 0
+gravedad = 0.5
+
 #Postes
 tubo_arriba= pygame.image.load('Imágenes/tubo arriba.png')
 tubo_abajo= pygame.image.load('Imágenes/TUBO ABAJO.png')
@@ -112,7 +115,18 @@ while running:
     for event in pygame.event.get(): #event es cualquier cosa que sucede dentro del juego
         if event.type == pygame.QUIT:
             running = False #Se termina el loop una vez que el usuario presiona la cruz del juego
-    
+        if event.type == pygame.KEYDOWN:  #detecta que apretas una tecla
+            if event.key == pygame.K_SPACE:  #detecta que esa tecla es el espacio
+                vel_y = -10  #numero negativo mueve el pajaro hacia arriba
+
+    vel_y += gravedad #la velocidad aumenta hacia abajo
+    playerY += vel_y
+
+    #evitando que el pájaro caiga debajo del piso
+    if playerY > height - playerImg.get_height():
+        playerY = height - playerImg.get_height()
+        vel_y = 0
+
     screen.blit(fondo,(0,0)) #dibuja el fondo
 
     player(playerX, playerY) #llamamos la funcion del jugador asi nos aparece en el juego
