@@ -33,10 +33,19 @@ class Pajaro:
         self.vy+= flap_strength
 
     def actualizar(self):
+      if not self.vida:
+          return
+      
       self.vy += gravedad
       self.y+= self.vy
       self.coordp[1]= self.y
 
+         
+      if self.y < 0 or self.y > height:
+         self.vida = False
+
+        
+         self.rendimiento += 1  #fitness
 
 
 class Poblacion:

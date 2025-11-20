@@ -138,30 +138,47 @@ while running:
             if event.key == pygame.K_SPACE:  #detecta que esa tecla es el espacio
                 vel_y = -10  #numero negativo mueve el pajaro hacia arriba
 
+        vivos = 0  #contador de pájaros vivos
+
+
     for pajaro in poblacion.pobl:
+         if not pajaro.vida:
+            continue  #no hacemos nada con los muertos
 
-        #el pajaro apunta hacia el centro del hueco de los tubos
-        prox_tubo = tubos[0]
-        coordt = (prox_tubo.x, prox_tubo.centro_del_hueco())
+         vivos += 1  
 
-        #decidir si aletear
-        pajaro.aletear(coordt)
+         #el pajaro apunta hacia el centro del hueco de los tubos
+         prox_tubo = tubos[0]
+         coordt = (prox_tubo.x, prox_tubo.centro_del_hueco())
 
-        #actualiza la física del pájaro
-        pajaro.actualizar()
+         #decidir si aletear
+         pajaro.aletear(coordt)
 
-        #evita techo, los positivos van para abajo(fuerza de gravedad), los negativos para arria
-        if pajaro.y < 0:
+         #actualiza la física del pájaro
+         pajaro.actualizar()
+
+         #evita techo, los positivos van para abajo(fuerza de gravedad), los negativos para arria
+         if pajaro.y < 0:
             pajaro.y = 0
             pajaro.vy = 0
 
-        #evita el piso, si el numero es mas alto que la pantalla, hace esto
-        if pajaro.y > height - playerImg.get_height():
+         #evita el piso, si el numero es mas alto que la pantalla, hace esto
+         if pajaro.y > height - playerImg.get_height():
             pajaro.y = height - playerImg.get_height()
             pajaro.vy = 0
 
-        #dibuja el pajaro en la pantalla
-        screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
+         #dibuja el pajaro en la pantalla
+         screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
+         player_hit = pygame.Rect(pajaro.coordp[0],pajaro.coordp[1],playerImg.get_width(),playerImg.get_height()) 
+
+         #toca un tubo y muere
+         for tubo in tubos:  
+            if (player_hit.colliderect(tubo.rect_arriba) or player_hit.colliderect(tubo.rect_abajo)):pajaro.vida = False
+            break
+
+         #si sigue vivo despues de la colision lo dibujo
+         if pajaro.vida: 
+            screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
 
 
     #player_hit = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height()) #clalculo el hitbox del pajaro
@@ -177,7 +194,10 @@ while running:
        nueva_x = tubos[-1].x + pipe_distance #posicion basado en el ultimo
        tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))        
        
+    if vivos == 0 and not game_over:    
+        game_over = True
 
+    
     #agregamos panel negro a la derecha
     panel_width = 250 #ancho del panel
     panel_x = width - panel_width #lo posicionamos al borde a la derecha
