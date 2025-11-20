@@ -11,6 +11,32 @@ pipe_width = 70
 pipe_gap = 200
 pipe_speed = 6
 
+class Pajaro:
+    def __init__(self, w):
+        if w==None:
+            w=[]
+            for peso in range(6):
+                w.append(round(random.uniform(-1, 1), 2))
+        self.w= w
+        self.vy= 0
+        self.y= 420
+        self.coordp= [120, self.y]
+        self.volar= False
+        self.rendimiento= 0
+        self.vida= True
+
+    def aletear(self, coordt): # coord= (x, y) #coordp ya la tengo seria self.coordp
+      Dx= abs(self.coordp[0]- coordt[0])
+      Dy= abs(self.coordp[1]- coordt[1])
+      self.volar= self.w[0]+self.w[1]*Dy + self.w[2]*(Dy**2) + self.w[3]*Dx + self.w[4]*(Dx**2) + self.w[5]*self.vy >0
+      if self.volar is True:
+        self.vy+= flap_strength
+
+    def actualizar(self):
+      self.vy += gravedad
+      self.y+= self.vy
+      self.corrdp[1]= self.y
+
 
 
 class Poblacion:
@@ -27,30 +53,10 @@ class Poblacion:
             #ver como hacer el codigo para que vuele
             #devuelve una lista con los rendimientos de cada pajaro
 
-    def seleccion(self, ):
+    #def seleccion(self, ):
         pass
         #ordenar de mayor a menor y quedarme con los 50 mejores, devuelve self.mejores
 
-    def cruzar(self, ):
+    #def cruzar(self, ):
             #cruzar pajaros(self.mejores) para conseguir la nueva pobl
         
-        
-        
-class Pajaro:
-    def __init__(self, w, vy, posicion): #tb deberia recibir la posicion del pajaro
-        if w==None:
-            w=[]
-            for peso in range(6):
-                w.append(round(random.uniform(-1, 1), 2))
-        self.w= w
-        self.vy= vy
-        self.coordp= posicion
-
-    def aletear(self, coordp, coordt): # coord= (x, y) #coordp ya la tengo seria self.coordp
-        Dx= abs(coordp[0]- coordt[0])
-        Dy= abs(coordp[1]- coordt[1])
-        volar= self.w[0]+self.w[1]*Dy + self.w[2]*(Dy**2) + self.w[3]*Dx + self.w[4]*(Dx**2) + self.w[5]*self.vy
-        return volar
-    
-
-
