@@ -109,7 +109,10 @@ def player(x,y): #parametros x,y para que podamos definir las posiciones que que
 
 
 
-tubos = [ Tubo(600, tubo_arriba, tubo_abajo), Tubo(800 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(850 + 2 * pipe_distance, tubo_arriba, tubo_abajo) ]
+tubos = [ Tubo(600, tubo_arriba, tubo_abajo), 
+         Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo), 
+         Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo) 
+]
 
 #Generamos el loop del juego
 running = True
