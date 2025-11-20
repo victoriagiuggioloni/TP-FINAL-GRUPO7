@@ -47,25 +47,36 @@ class Pajaro:
         
          self.rendimiento += 1  #fitness
 
-
 class Poblacion:
     def __init__(self, pobl):
         if pobl == None:
             pobl=[]
             for p in range(100):
-                pobl.append(Pajaro(None))
-                #print(w)
-                #print(pobl)
+                pobl.append(Pajaro(None)) 
+
         self.pobl= pobl
-        
-    def ver_rendimiento(self, ):
-            #ver como hacer el codigo para que vuele
-            #devuelve una lista con los rendimientos de cada pajaro
 
-    #def seleccion(self, ):
-        pass
-        #ordenar de mayor a menor y quedarme con los 50 mejores, devuelve self.mejores
+    def ver_rendimiento(self):
+       for p in self.pobl:
+        estado= paso_tubo() #hacer la funcion todavia que devuelve false si se choco y true si paso el tubo
+        if estado==True:
+          p.rendimiento += 1
+        else:
+          p.vida= False
 
-    #def cruzar(self, ):
-            #cruzar pajaros(self.mejores) para conseguir la nueva pobl
-        
+    def poblacion_viva(self):
+      return any(p.vida for p in self.pobl)
+
+    def seleccion(self):
+      mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :20]
+      return mejores
+
+    def cruzar(self, mejores):
+      nueva_gen=[]
+      for nuevo_p in range(100):
+        w_hijo=[]
+        padre, madre= random.choices(mejores, k=2)
+        for gen in range(6):
+          w_hijo.append(random.choice([padre.w[gen], madre.w[gen]]))
+        nueva_gen.append(Pajaro(w_hijo))
+      self.pobl= nueva_gen
