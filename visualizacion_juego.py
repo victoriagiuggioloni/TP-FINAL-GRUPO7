@@ -104,8 +104,8 @@ tubo_abajo= pygame.image.load('Imágenes/TUBO ABAJO.png')
 clock = pygame.time.Clock()
 
 #creamos una funcion del player del juego
-def player(x,y): #parametros x,y para que podamos definir las posiciones que queramos que tenga el player 
-    screen.blit(playerImg, (x, y))
+def dibujar_pajaros(pajaro): #parametros x,y para que podamos definir las posiciones que queramos que tenga el player 
+    screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
 
 
 
@@ -114,10 +114,13 @@ tubos = [ Tubo(600, tubo_arriba, tubo_abajo),
          Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo) 
 ]
 
+from algoritmo import Poblacion
+poblacion = Poblacion(None)
+
 #Generamos el loop del juego
 running = True
 while running:
-
+    screen.blit(fondo, (0,0))
     clock.tick(fps)
     for event in pygame.event.get(): #event es cualquier cosa que sucede dentro del juego
         if event.type == pygame.QUIT:
@@ -126,17 +129,31 @@ while running:
             if event.key == pygame.K_SPACE:  #detecta que esa tecla es el espacio
                 vel_y = -10  #numero negativo mueve el pajaro hacia arriba
 
-    vel_y += gravedad #la velocidad aumenta hacia abajo
-    playerY += vel_y
+    for pajaro in poblacion.pobl:
 
-    #evitando que el pájaro caiga debajo del piso
-    if playerY > height - playerImg.get_height():
-        playerY = height - playerImg.get_height()
-        vel_y = 0
+        #el pajaro apunta hacia el centro del hueco de los tubos
+        prox_tubo = tubos[0]
+        coordt = (prox_tubo.x, prox_tubo.centro_del_hueco())
 
-    screen.blit(fondo,(0,0)) #dibuja el fondo
+        #decidir si aletear
+        pajaro.aletear(coordt)
 
-    player(playerX, playerY) #llamamos la funcion del jugador asi nos aparece en el juego
+        #actualiza la física del pájaro
+        pajaro.actualizar()
+
+        #evita techo, los positivos van para abajo(fuerza de gravedad), los negativos para arria
+        if pajaro.y < 0:
+            pajaro.y = 0
+            pajaro.vy = 0
+
+        #evita el piso, si el numero es mas alto que la pantalla, hace esto
+        if pajaro.y > height - playerImg.get_height():
+            pajaro.y = height - playerImg.get_height()
+            pajaro.vy = 0
+
+        #dibuja el pajaro en la pantalla
+        screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
+
 
     #player_hit = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height()) #clalculo el hitbox del pajaro
 
@@ -146,10 +163,10 @@ while running:
        tubo.dibujar(screen)
       
       #Si el primer tubo salio, crear uno nuevo manteniendo la distancia
-       if tubos[0].nuevos_tubos():
-           tubos.pop(0) #Eliminamos el tubo que salio
-           nueva_x = tubos[-1].x + pipe_distance #posicion basado en el ultimo
-           tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))        
+    if tubos[0].nuevos_tubos():
+       tubos.pop(0) #Eliminamos el tubo que salio
+       nueva_x = tubos[-1].x + pipe_distance #posicion basado en el ultimo
+       tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))        
        
 
     #agregamos panel negro a la derecha

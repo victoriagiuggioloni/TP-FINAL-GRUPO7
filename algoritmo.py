@@ -35,7 +35,7 @@ class Pajaro:
     def actualizar(self):
       self.vy += gravedad
       self.y+= self.vy
-      self.corrdp[1]= self.y
+      self.coordp[1]= self.y
 
 
 
@@ -43,8 +43,8 @@ class Poblacion:
     def __init__(self, pobl):
         if pobl == None:
             pobl=[]
-            for p in range(99):
-                pobl.append(Pajaro(None, 0))
+            for p in range(100):
+                pobl.append(Pajaro(None))
                 #print(w)
                 #print(pobl)
         self.pobl= pobl
