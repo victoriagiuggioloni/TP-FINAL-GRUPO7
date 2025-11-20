@@ -10,6 +10,10 @@ pipe_speed = 6
 fps = 60
 pipe_distance = 480
 
+#Variables del fondo para generar movimiento
+fondo_x = 0
+fondo_vel = 1.5
+
 current_distance= 0
 average_distance = 0
 scroll_speed = 3
@@ -120,7 +124,12 @@ poblacion = Poblacion(None)
 #Generamos el loop del juego
 running = True
 while running:
-    screen.blit(fondo, (0,0))
+    fondo_x -= fondo_vel
+    if fondo_x <= -width:
+        fondo_x = 0
+    screen.blit(fondo, (fondo_x, 0))
+    screen.blit(fondo, (fondo_x + width, 0))
+
     clock.tick(fps)
     for event in pygame.event.get(): #event es cualquier cosa que sucede dentro del juego
         if event.type == pygame.QUIT:
