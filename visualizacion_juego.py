@@ -4,11 +4,11 @@ import random
 
 height = 600
 width = 1000
-pipe_width = 140
+pipe_width = 80
 pipe_gap = 200
 pipe_speed = 6
 fps = 60
-pipe_distance = 250
+pipe_distance = 480
 
 current_distance= 0
 average_distance = 0
@@ -138,19 +138,16 @@ while running:
     #player_hit = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height()) #clalculo el hitbox del pajaro
 
     
-    for tubo in tubos:
-        tubo.mover()
-        tubo.dibujar(screen)
-        if tubos[0].nuevos_tubos():
-            # ahora el tubo[2] pasa a ser el de adelante
-            tubos[0] = tubos[2]
-
-            # creamos un nuevo tubo atras, manteniendo la distancia
-            nueva_x = tubos[0].x + 650
-            tubos[2] = Tubo(nueva_x, tubo_arriba, tubo_abajo)
-        
-            
-            
+    for tubo in list(tubos):
+       tubo.mover()
+       tubo.dibujar(screen)
+      
+      #Si el primer tubo salio, crear uno nuevo manteniendo la distancia
+       if tubos[0].nuevos_tubos():
+           tubos.pop(0) #Eliminamos el tubo que salio
+           nueva_x = tubos[-1].x + pipe_distance #posicion basado en el ultimo
+           tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))        
+       
 
     #agregamos panel negro a la derecha
     panel_width = 250 #ancho del panel
