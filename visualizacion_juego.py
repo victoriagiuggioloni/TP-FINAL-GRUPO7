@@ -121,9 +121,10 @@ tubos = [ Tubo(600, tubo_arriba, tubo_abajo),
 from algoritmo import Poblacion
 poblacion = Poblacion(None)
 
+def actulizar_fondo():
 #Generamos el loop del juego
-running = True
-while running:
+ running = True
+ while running:
     fondo_x -= fondo_vel
     if fondo_x <= -width:
         fondo_x = 0
@@ -134,13 +135,14 @@ while running:
     for event in pygame.event.get(): #event es cualquier cosa que sucede dentro del juego
         if event.type == pygame.QUIT:
             running = False #Se termina el loop una vez que el usuario presiona la cruz del juego
-        if event.type == pygame.KEYDOWN:  #detecta que apretas una tecla
-            if event.key == pygame.K_SPACE:  #detecta que esa tecla es el espacio
-                vel_y = -10  #numero negativo mueve el pajaro hacia arriba
+        #if event.type == pygame.KEYDOWN:  #detecta que apretas una tecla
+            #if event.key == pygame.K_SPACE:  #detecta que esa tecla es el espacio
+                #vel_y = -10  #numero negativo mueve el pajaro hacia arriba
 
-        vivos = 0  #contador de pájaros vivos
+        
 
-
+def pajaro_murio(pajaro):
+    vivos = 0  #contador de pájaros vivos
     for pajaro in poblacion.pobl:
          if not pajaro.vida:
             continue  #no hacemos nada con los muertos
@@ -179,11 +181,12 @@ while running:
          #si sigue vivo despues de la colision lo dibujo
          if pajaro.vida: 
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
+    return vivos 
 
 
     #player_hit = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height()) #clalculo el hitbox del pajaro
 
-    
+def actualizar_tubos(): 
     for tubo in list(tubos):
        tubo.mover()
        tubo.dibujar(screen)
@@ -194,56 +197,56 @@ while running:
        nueva_x = tubos[-1].x + pipe_distance #posicion basado en el ultimo
        tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))        
        
-    if vivos == 0 and not game_over:    
-        game_over = True
-
     
+
+
+def panel_estadisticas(): 
     #agregamos panel negro a la derecha
     panel_width = 250 #ancho del panel
     panel_x = width - panel_width #lo posicionamos al borde a la derecha
 
     pygame.draw.rect(screen, (0,0,0), (panel_x,0, panel_width, height))
 
+
+#titulo del panel
+ font_titulo = pygame.font.SysFont("Comic Sans MS", 24, bold = True)
+ titulo = font_titulo.render("GA Statistics", True, (250,250,250))
+ screen.blit(titulo, (panel_x + 20, 10))
     
-    #titulo del panel
-    font_titulo = pygame.font.SysFont("Comic Sans MS", 24, bold = True)
-    titulo = font_titulo.render("GA Statistics", True, (250,250,250))
-    screen.blit(titulo, (panel_x + 20, 10))
-    
-    #agregamos texto dentro del panel
-    font = pygame.font.SysFont("Arial", 14)
-    texto = font.render("Generation: ", True, (250,250,250))
-    screen.blit(texto, (panel_x + 20, 60))
+#agregamos texto dentro del panel
+font = pygame.font.SysFont("Arial", 14)
+texto = font.render("Generation: ", True, (250,250,250))
+screen.blit(texto, (panel_x + 20, 60))
 
-    font = pygame.font.SysFont("Arial", 14)
-    texto = font.render("Alives: ", True, (250,250,250))
-    screen.blit(texto, (panel_x + 20, 80))
+font = pygame.font.SysFont("Arial", 14)
+texto = font.render("Alives: ", True, (250,250,250))
+screen.blit(texto, (panel_x + 20, 80))
 
-    font = pygame.font.SysFont("Arial", 14)
-    texto = font.render("Prev Gen 2min: ", True, (250,250,250))
-    screen.blit(texto, (panel_x + 20, 100))
+font = pygame.font.SysFont("Arial", 14)
+texto = font.render("Prev Gen 2min: ", True, (250,250,250))
+screen.blit(texto, (panel_x + 20, 100))
 
-    font = pygame.font.SysFont("Arial", 14)
-    texto = font.render(f"Speed: {scroll_speed}X ", True, (250,250,250))
-    screen.blit(texto, (panel_x + 20, 120))
+font = pygame.font.SysFont("Arial", 14)
+texto = font.render(f"Speed: {scroll_speed}X ", True, (250,250,250))
+screen.blit(texto, (panel_x + 20, 120))
 
-    font = pygame.font.SysFont("Arial", 14)
-    current_distance += 1 #se le va sumando la distancia
-    texto = font.render(f"Current Distance: {current_distance} ", True, (250,250,250))
-    screen.blit(texto, (panel_x + 20, 160))
+font = pygame.font.SysFont("Arial", 14)
+current_distance += 1 #se le va sumando la distancia
+texto = font.render(f"Current Distance: {current_distance} ", True, (250,250,250))
+screen.blit(texto, (panel_x + 20, 160))
 
 
-    font = pygame.font.SysFont("Arial", 14)
-    texto = font.render("Best Distance: ", True, (250,250,250))
-    screen.blit(texto, (panel_x + 20, 180))
+font = pygame.font.SysFont("Arial", 14)
+texto = font.render("Best Distance: ", True, (250,250,250))
+screen.blit(texto, (panel_x + 20, 180))
 
-    font = pygame.font.SysFont("Arial", 14)
-    texto = font.render("Avg Distance: ", True, (250,250,250))
-    screen.blit(texto, (panel_x + 20, 200))
+font = pygame.font.SysFont("Arial", 14)
+texto = font.render("Avg Distance: ", True, (250,250,250))
+screen.blit(texto, (panel_x + 20, 200))
 
     
 
-    pygame.display.update() #actualizamos el fondo con la imagen
+pygame.display.update() #actualizamos el fondo con la imagen
 
 pygame.quit()
 
