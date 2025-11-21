@@ -205,9 +205,18 @@ while running:
     texto = font.render(f"Current Distance: {current_distance}", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 160))
 
-    texto = font.render("Best Distance: ", True, (250, 250, 250))
+    #Mejor Distancia
+    mejor_distancia = max(p.rendimiento for p in poblacion.pobl)
+    texto = font.render(f"Best Distance: {mejor_distancia} ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 180))
 
+    #Diatncia promedio
+    distancia = [p.rendimiento for p in poblacion.pobl]
+    if len(distancia) > 0:
+        promedio = sum(distancia) / len(distancia)
+    else:
+        promedio = 0
+        
     texto = font.render("Avg Distance: ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 200))
 

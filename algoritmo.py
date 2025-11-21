@@ -40,12 +40,11 @@ class Pajaro:
       self.y+= self.vy
       self.coordp[1]= self.y
 
-         
+      self.rendimiento += 1  #fitness,
+      #sumamos distancia recorrdia frame a frame
+
       if self.y < 0 or self.y > height:
          self.vida = False
-
-        
-         self.rendimiento += 1  #fitness
 
 class Poblacion:
     def __init__(self, pobl):
