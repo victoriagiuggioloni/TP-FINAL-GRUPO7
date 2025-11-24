@@ -1,6 +1,7 @@
 import pygame
 import random
 from algoritmo import Poblacion
+from funciones import *
 
 height = 600
 width = 1000
@@ -143,27 +144,9 @@ while running:
         #actualiza física
         pajaro.actualizar()
 
-        #no toca el techo
-        if pajaro.y < 0:
-            pajaro.y = 0
-            pajaro.vy = 0
-            pajaro.coordp[1] = pajaro.y
-
-        #no toca el piso
-        if pajaro.y > height - playerImg.get_height():
-            pajaro.y = height - playerImg.get_height()
-            pajaro.vy = 0
-            pajaro.coordp[1] = pajaro.y
-
-        # hitbox
-        player_hit = pygame.Rect(pajaro.coordp[0],pajaro.coordp[1],playerImg.get_width(),playerImg.get_height(),)
-
-        #mueren si tocan los tubos
-        for tubo in tubos:
-            if player_hit.colliderect(tubo.rect_arriba) or player_hit.colliderect(tubo.rect_abajo):
-                pajaro.vida = False
-                break
-
+        if not paso_tubo(pajaro, tubos, playerImg):
+            pajaro.vida= False
+      
         #si sigue vivo lo dibujo
         if pajaro.vida:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
@@ -178,6 +161,15 @@ while running:
         tubos.pop(0)
         nueva_x = tubos[-1].x + pipe_distance
         tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))
+
+    if vivos== 0:
+        mejores = poblacion.seleccion()
+        poblacion.cruzar(mejores)
+        poblacion.mutar()
+
+        #resteamos estadisticas para la nueva generacion
+        current_distance=0
+        tubos= [Tubo(600, tubo_arriba, tubo_abajo), Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo),]
 
     #estadisiticas
     panel_width = 250

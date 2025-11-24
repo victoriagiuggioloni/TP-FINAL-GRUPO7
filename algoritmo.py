@@ -1,6 +1,7 @@
 
 import random
 import pygame
+from funciones import *
 
 
 height = 600
@@ -40,11 +41,12 @@ class Pajaro:
       self.y+= self.vy
       self.coordp[1]= self.y
 
-      self.rendimiento += 1  #fitness,
+      if self.y < 0 or self.y > height -5:
+         self.vida = False
+      else:
+         self.rendimiento += 1  #fitness,
       #sumamos distancia recorrdia frame a frame
 
-      if self.y < 0 or self.y > height:
-         self.vida = False
 
 class Poblacion:
     def __init__(self, pobl):
@@ -54,17 +56,6 @@ class Poblacion:
                 pobl.append(Pajaro(None)) 
 
         self.pobl= pobl
-
-    def ver_rendimiento(self):
-       for p in self.pobl:
-        estado= paso_tubo() #hacer la funcion todavia que devuelve false si se choco y true si paso el tubo
-        if estado==True:
-          p.rendimiento += 1
-        else:
-          p.vida= False
-
-    def poblacion_viva(self):
-      return any(p.vida for p in self.pobl)
 
     def seleccion(self):
       mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :20]
@@ -79,3 +70,9 @@ class Poblacion:
           w_hijo.append(random.choice([padre.w[gen], madre.w[gen]]))
         nueva_gen.append(Pajaro(w_hijo))
       self.pobl= nueva_gen
+
+    def mutar(self):
+      for p in self.pobl:
+        for i in range(6):
+          if random.random() < 0.2:
+              p.w[i]=round(random.uniform(-1, 1), 2)  # mutación
