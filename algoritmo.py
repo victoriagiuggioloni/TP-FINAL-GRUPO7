@@ -7,7 +7,7 @@ from funciones import *
 height = 600
 width = 1000
 gravedad = 0.5
-flap_strength = -10
+flap_strength = -10 #####
 pipe_width = 70
 pipe_gap = 200
 pipe_speed = 6
@@ -74,5 +74,6 @@ class Poblacion:
     def mutar(self):
       for p in self.pobl:
         for i in range(6):
-          if random.random() < 0.2:
+          if random.random() < 0.1:
               p.w[i]=round(random.uniform(-1, 1), 2)  # mutación
+             # p.w[i] = max(-1, min(1, p.w[i]))

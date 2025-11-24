@@ -19,7 +19,7 @@ current_distance = 0
 average_distance = 0
 scroll_speed = 3
 speed = scroll_speed
-
+generacion=1
 
 class Tubo:
 
@@ -125,7 +125,7 @@ while running:
     screen.blit(fondo, (fondo_x, 0))
     screen.blit(fondo, (fondo_x + width, 0))
 
-    #pajaros
+    #pajaros 
     vivos = 0  #contador de pájaros vivos
 
     for pajaro in poblacion.pobl:
@@ -166,7 +166,7 @@ while running:
         mejores = poblacion.seleccion()
         poblacion.cruzar(mejores)
         poblacion.mutar()
-
+        generacion+=1
         #resteamos estadisticas para la nueva generacion
         current_distance=0
         tubos= [Tubo(600, tubo_arriba, tubo_abajo), Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo),]
@@ -181,7 +181,7 @@ while running:
     screen.blit(titulo, (panel_x + 20, 10))
 
     font = pygame.font.SysFont("Arial", 14)
-    texto = font.render("Generation: ", True, (250, 250, 250))
+    texto = font.render(f"Generation: {generacion}", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 60))
 
     texto = font.render(f"Alives: {vivos}", True, (250, 250, 250))
