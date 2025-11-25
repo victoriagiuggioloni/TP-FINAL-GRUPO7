@@ -58,7 +58,7 @@ class Poblacion:
         self.pobl= pobl
 
     def seleccion(self):
-      mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :20]
+      mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :5]
       return mejores
 
     def cruzar(self, mejores):
