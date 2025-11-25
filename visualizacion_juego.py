@@ -102,12 +102,14 @@ tubo_abajo = pygame.image.load("Imágenes/TUBO ABAJO.png")
 clock = pygame.time.Clock()
 
 #primeros tres tubos
-tubos = [Tubo(600, tubo_arriba, tubo_abajo),Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo),Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo),]
+tubos = [Tubo(300, tubo_arriba, tubo_abajo),Tubo(300 + pipe_distance, tubo_arriba, tubo_abajo),Tubo(300 + 2 * pipe_distance, tubo_arriba, tubo_abajo),]
 
 #poblacion inicial
 poblacion = Poblacion(None)
 
 #loop
+tiempo_vivo = 0
+max_tiempo_vivo = 0
 
 running = True
 while running:
@@ -151,6 +153,9 @@ while running:
         if pajaro.vida:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
 
+        if vivos > 0:
+            tiempo_vivo += 1
+
     #tubos
     for tubo in list(tubos):
         tubo.mover()
@@ -164,9 +169,13 @@ while running:
 
     if vivos== 0:
         mejores = poblacion.seleccion()
-        poblacion.cruzar(mejores)
+        nueva_gen= poblacion.cruzar(mejores)
+        poblacion.pobl= nueva_gen
         poblacion.mutar()
+
         generacion+=1
+        max_tiempo_vivo = tiempo_vivo
+        tiempo_vivo = 0 
         #resteamos estadisticas para la nueva generacion
         current_distance=0
         tubos= [Tubo(600, tubo_arriba, tubo_abajo), Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo),]
@@ -201,6 +210,12 @@ while running:
     mejor_distancia = max(p.rendimiento for p in poblacion.pobl)
     texto = font.render(f"Best Distance: {mejor_distancia} ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 180))
+
+    texto = font.render(f"Current Survival: {tiempo_vivo / fps:.2f}s", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 220))
+
+    texto = font.render(f"Last Gen Survival: {max_tiempo_vivo / fps:.2f}s", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 240))
 
     #Diatncia promedio
     distancia = [p.rendimiento for p in poblacion.pobl]
