@@ -8,7 +8,7 @@ width = 1000
 pipe_width = 80
 pipe_gap = 200
 pipe_speed = 6
-fps = 60
+fps = 240
 pipe_distance = 480
 
 #movimiento
@@ -17,7 +17,7 @@ fondo_vel = 1.5
 
 current_distance = 0
 average_distance = 0
-scroll_speed = 1
+scroll_speed = 0.5
 speed = scroll_speed
 generacion=1
 
@@ -76,6 +76,8 @@ class Tubo:
 #empieza el juego
 
 pygame.init()
+clock = pygame.time.Clock()
+
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Angry Flappy Bird")
 
@@ -99,7 +101,6 @@ gravedad = 0.5
 tubo_arriba = pygame.image.load("Imágenes/tubo arriba.png")
 tubo_abajo = pygame.image.load("Imágenes/TUBO ABAJO.png")
 
-clock = pygame.time.Clock()
 
 #primeros tres tubos
 tubos = [Tubo(300, tubo_arriba, tubo_abajo),Tubo(300 + pipe_distance, tubo_arriba, tubo_abajo),Tubo(300 + 2 * pipe_distance, tubo_arriba, tubo_abajo),]
@@ -119,6 +120,22 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                scroll_speed = 1
+            if event.key == pygame.K_2:
+                scroll_speed = 2
+            if event.key == pygame.K_3:
+                scroll_speed = 3
+            if event.key == pygame.K_4:
+                scroll_speed = 4
+            if event.key == pygame.K_5:
+                scroll_speed = 5
+
+            # actualizar velocidad de tubos
+            for tubo in tubos:
+                tubo.velocidad = scroll_speed
 
     #fondo se mueve
     fondo_x -= fondo_vel
@@ -153,8 +170,8 @@ while running:
         if pajaro.vida:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
 
-        if vivos > 0:
-            tiempo_vivo += 1
+    if vivos > 0:
+        tiempo_vivo += 1
 
     #tubos
     for tubo in list(tubos):
