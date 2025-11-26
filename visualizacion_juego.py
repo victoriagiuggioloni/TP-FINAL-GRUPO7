@@ -17,7 +17,7 @@ fondo_vel = 1.5
 
 current_distance = 0
 average_distance = 0
-scroll_speed = 3
+scroll_speed = 1
 speed = scroll_speed
 generacion=1
 
