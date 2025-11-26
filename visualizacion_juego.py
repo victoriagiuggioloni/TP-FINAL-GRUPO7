@@ -114,24 +114,24 @@ max_tiempo_vivo = 0
 
 running = True
 while running:
-    clock.tick(fps)
+    
 
     #eventos
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:
-                scroll_speed = 1
-            if event.key == pygame.K_2:
-                scroll_speed = 2
-            if event.key == pygame.K_3:
-                scroll_speed = 3
-            if event.key == pygame.K_4:
-                scroll_speed = 4
-            if event.key == pygame.K_5:
-                scroll_speed = 5
+        #if event.type == pygame.KEYDOWN:
+         #   if event.key == pygame.K_1:
+          #      scroll_speed = 1
+   #        # if event.key == pygame.K_2:
+    #            scroll_speed = 2
+     #       if event.key == pygame.K_3:
+      #          scroll_speed = 3
+       #     if event.key == pygame.K_4:
+        #        scroll_speed = 4
+         #   if event.key == pygame.K_5:
+          #      scroll_speed = 5
 
             # actualizar velocidad de tubos
             for tubo in tubos:
@@ -243,6 +243,7 @@ while running:
         
     texto = font.render("Avg Distance: ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 200))
+    clock.tick(fps)
 
     pygame.display.update()
 
