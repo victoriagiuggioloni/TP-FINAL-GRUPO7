@@ -8,6 +8,5 @@ def paso_tubo(pajaro, tubos, playerImg):
     for tubo in tubos:
         if player_hit.colliderect(tubo.rect_arriba) or player_hit.colliderect(tubo.rect_abajo):
             return False
-    pajaro.rendimiento+= 30
     return True
 
