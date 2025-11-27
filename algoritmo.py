@@ -45,8 +45,9 @@ class Pajaro:
       if self.y < 0 or self.y > height - self.altura:
          self.vida = False
       else:
-         self.rendimiento += 1  #fitness,
-      #sumamos distancia recorrdia frame a frame
+         self.rendimiento += 1  #fitness, sumamos distancia recorrdia frame a frame
+         if self.rendimiento > 120 * 60: #límite de 120 segundos, cuando un pájaro supera esto, termina el juego
+           self.vida = False
 
 
 class Poblacion:

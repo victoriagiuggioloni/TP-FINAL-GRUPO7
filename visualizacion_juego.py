@@ -17,9 +17,10 @@ fondo_vel = 1.5
 
 current_distance = 0
 average_distance = 0
-scroll_speed = 0.5
+scroll_speed = 1
 speed = scroll_speed
 generacion=1
+max_generaciones = 100
 
 class Tubo:
 
@@ -191,6 +192,8 @@ while running:
         poblacion.mutar()
 
         generacion+=1
+        if generacion > max_generaciones:
+            running = False
         max_tiempo_vivo = tiempo_vivo
         tiempo_vivo = 0 
         #resteamos estadisticas para la nueva generacion
