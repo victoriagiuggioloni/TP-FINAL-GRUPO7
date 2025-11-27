@@ -7,13 +7,14 @@ from funciones import *
 height = 600
 width = 1000
 gravedad = 0.5
-flap_strength = -8
+flap_strength = -7
 pipe_width = 70
 pipe_gap = 200
 pipe_speed = 6
 
 class Pajaro:
     def __init__(self, w):
+        self.contado_para_max = False
         if w==None:
             w=[]
             for peso in range(6):
@@ -46,9 +47,7 @@ class Pajaro:
          self.vida = False
       else:
          self.rendimiento += 1  #fitness, sumamos distancia recorrdia frame a frame
-         if self.rendimiento > 120 * 60: #límite de 120 segundos, cuando un pájaro supera esto, termina el juego
-           self.vida = False
-
+         
 
 class Poblacion:
     def __init__(self, pobl):

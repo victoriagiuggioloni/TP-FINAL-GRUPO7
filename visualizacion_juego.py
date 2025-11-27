@@ -114,6 +114,9 @@ tiempo_vivo = 0
 max_tiempo_vivo = 0
 
 running = True
+pajaros_tiempo_max = 0
+tiempo_limite = 120 * 60 #límite de 120 segundos, termina el juego
+fin_por_tiempo = False
 while running:
     
 
@@ -164,12 +167,21 @@ while running:
         #actualiza física
         pajaro.actualizar()
 
+        if pajaro.vida and pajaro.rendimiento >= tiempo_limite:
+            if not pajaro.contado_para_max:
+                pajaros_tiempo_max += 1
+            # opcional: marcarlo como ya contado para que no sume varias veces
+                pajaro.contado_para_max = True
+
         if not paso_tubo(pajaro, tubos, playerImg):
             pajaro.vida= False
       
         #si sigue vivo lo dibujo
         if pajaro.vida:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
+
+    if pajaros_tiempo_max >= 30:
+        running = False
 
     if vivos > 0:
         tiempo_vivo += 1
