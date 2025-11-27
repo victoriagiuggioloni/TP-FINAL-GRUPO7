@@ -20,7 +20,7 @@ average_distance = 0
 scroll_speed = 1
 speed = scroll_speed
 generacion=1
-max_generaciones = 100
+max_generaciones = 100  #tope de geenraciones, si pasa esto se termina el juego
 
 class Tubo:
 
