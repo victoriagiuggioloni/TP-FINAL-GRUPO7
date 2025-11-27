@@ -7,10 +7,10 @@ from funciones import *
 height = 600
 width = 1000
 gravedad = 0.5
-flap_strength = -8
+flap_strength = -10
 pipe_width = 70
 pipe_gap = 200
-pipe_speed = 6
+pipe_speed = 8
 
 class Pajaro:
     def __init__(self, w):
@@ -31,7 +31,7 @@ class Pajaro:
       Dx= abs(self.coordp[0]- coordt[0])
       Dy= abs(self.coordp[1]- coordt[1])
       self.volar= self.w[0]+self.w[1]*Dy + self.w[2]*(Dy**2) + self.w[3]*Dx + self.w[4]*(Dx**2) + self.w[5]*self.vy >0
-      if self.volar is True:
+      if self.volar and self.vy >= 0: #solo aletea si esta cayendo
         self.vy = flap_strength
 
     def actualizar(self):
