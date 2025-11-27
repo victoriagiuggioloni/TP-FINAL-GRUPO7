@@ -78,6 +78,9 @@ class Tubo:
 
 pygame.init()
 clock = pygame.time.Clock()
+pygame.mixer.music.load("fondo_musica.mp3")
+pygame.mixer.music.play(-3) 
+sonido_next_gen = pygame.mixer.Sound("next_round.mp3")
 
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Angry Flappy Bird")
@@ -198,6 +201,13 @@ while running:
         tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))
 
     if vivos== 0:
+        # Reproducir voz "Next Generation"
+        sonido_next_gen.play()
+
+        # Esperar a que termine (1.5 segundos)
+        pygame.time.delay(1500)
+
+
         mejores = poblacion.seleccion()
         nueva_gen= poblacion.cruzar(mejores)
         poblacion.pobl= nueva_gen
@@ -259,6 +269,8 @@ while running:
     texto = font.render("Avg Distance: ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 200))
     clock.tick(fps)
+
+    dibujar_genoma(screen, poblacion.pobl, panel_x+20, 280)
 
     pygame.display.update()
 
