@@ -8,7 +8,7 @@ width = 1000
 pipe_width = 80
 pipe_gap = 200
 pipe_speed = 6
-fps = 240
+fps = 60
 pipe_distance = 480
 
 #movimiento
