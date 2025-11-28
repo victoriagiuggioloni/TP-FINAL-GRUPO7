@@ -64,42 +64,42 @@ class Pajaro:
 
 class Poblacion:
     def __init__(self, pobl):
-        if pobl == None:
+        if pobl == None: 
             pobl=[]
-            for p in range(100):
-                pobl.append(Pajaro(None)) 
+            for p in range(100): #bucle para crear 100 pájaros
+                pobl.append(Pajaro(None)) #cada pájaro se crea sin pesos
 
         self.pobl= pobl
 
     def seleccion(self):
-      mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :15]
-      return mejores
+      mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :15] #ordena la pob de menor a mayor, toma los 15 mejores según su rendimiento
+      return mejores 
 
-    def cruzar(self, mejores):
-      nueva_gen=[]
-      for nuevo_p in range(100):
-        w_hijo=[]
-        padre, madre= random.choices(mejores, k=2)
-        for gen in range(6):
+    def cruzar(self, mejores): #crea nueva generación mezclando los pesos de los mejores pájaros (mejores es la lista de los 15 padres)
+      nueva_gen=[] #lista vacía donde se almacenarán los hijos
+      for nuevo_p in range(100): #bucle crea 100 pájaros nuevos
+        w_hijo=[] #lista vacía con pesos del hijo
+        padre, madre= random.choices(mejores, k=2)   #elige aleatoriamente dos padres de la lista de los mejores
+        for gen in range(6):  #recorre los 6 pesos del pajaro
           if random.random()<0.5:
-             w_hijo.append(padre.w[gen])
+             w_hijo.append(padre.w[gen]) #cruza genes de los 2 pájaros con 50% de prob
           else:
-             w_hijo.append(madre.w[gen])
+             w_hijo.append(madre.w[gen]) #cruza genes
         
-        hijo= Pajaro(w_hijo)
+        hijo= Pajaro(w_hijo) #crea hijo en base a la mezcla de genes
 
         hijo.rendimiento = 0
         hijo.vida = True
         hijo.vy = 0
         hijo.y = 420
         hijo.coordp = [120, hijo.y]
-        nueva_gen.append(hijo)
+        nueva_gen.append(hijo) #va agregando los hijos a la lista de los 100 nuevos
       
-      return nueva_gen
+      return nueva_gen #devuelve lista completa de nuevos 100 pajaros
 
-    def mutar(self):
-      for p in self.pobl:
-        for i in range(6):
-          if random.random() < 0.2:
-              p.w[i]+=round(random.uniform(-0.2, 0.2), 2)  # mutación
-              p.w[i] = max(-2, min(1, p.w[i]))
+    def mutar(self): #aplica mutaciones aleatorias a la población
+      for p in self.pobl: #para cada pájaro p en pobl
+        for i in range(6): #recorre sus 6 pesos/genes
+          if random.random() < 0.2: #cambia el peso con la prob del 20%
+              p.w[i]+=round(random.uniform(-0.2, 0.2), 2)  # mutación, añade pequeño valor aleatorio
+              p.w[i] = max(-2, min(1, p.w[i])) #asegura que el peso se mantenga dentro de un rango de -2 a 1
