@@ -6,7 +6,7 @@ from funciones import *
 height = 600
 width = 1000
 pipe_width = 80
-pipe_gap = 200
+pipe_gap = random.randint (150, 260)
 pipe_speed = 6
 fps = 60
 pipe_distance = 480
@@ -28,12 +28,13 @@ class Tubo:
         self.x = posicion_x
         self.ancho = pipe_width
         self.velocidad = pipe_speed
+        self.gap = random.randint(190,220)
 
         self.imagen_arriba_original = imagen_arriba
         self.imagen_abajo_original = imagen_abajo
         # altura de tubos
-        self.altura_superior = random.randint(110, height - pipe_gap - 110)
-        self.altura_inferior = self.altura_superior + pipe_gap
+        self.altura_superior = random.randint(110, height - self.gap - 110)
+        self.altura_inferior = self.altura_superior + self.gap
         # rectángulos
         self.rect_arriba = pygame.Rect(self.x, 0, self.ancho, self.altura_superior)
         self.rect_abajo = pygame.Rect(
@@ -71,7 +72,7 @@ class Tubo:
 
     def centro_del_hueco(self):
         """Devuelve la posición y del centro del hueco"""
-        return self.altura_superior + pipe_gap / 2
+        return self.altura_superior + self.gap / 2
 
 
 #empieza el juego
@@ -204,8 +205,9 @@ while running:
         # Reproducir voz "Next Generation"
         sonido_next_gen.play()
 
+
         # Esperar a que termine (1.5 segundos)
-        pygame.time.delay(1500)
+        #pygame.time.delay(1500)
 
 
         mejores = poblacion.seleccion()
@@ -227,7 +229,7 @@ while running:
     panel_x = width - panel_width
     pygame.draw.rect(screen, (0, 0, 0), (panel_x, 0, panel_width, height))
 
-    font_titulo = pygame.font.SysFont("Comic Sans MS", 24, bold=True)
+    font_titulo = pygame.font.SysFont("Century Gothic", 24, bold=False)
     titulo = font_titulo.render("GA Statistics", True, (250, 250, 250))
     screen.blit(titulo, (panel_x + 20, 10))
 

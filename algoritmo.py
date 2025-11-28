@@ -4,6 +4,7 @@ import pygame
 from funciones import *
 
 
+
 height = 600
 width = 1000
 gravedad = 0.5
@@ -30,6 +31,17 @@ class Pajaro:
     def aletear(self, coordt): # coord= (x, y) #coordp ya la tengo seria self.coordp
       Dx= abs(self.coordp[0]- coordt[0])
       Dy= abs(self.coordp[1]- coordt[1])
+      #VICKY
+      #d_x = tubo.x - self.coordp[0]
+      #d_up = self.coordp[1] - tubo.altura_superior
+      #d_down = tubo.altura_inferior - (self.coordp[1] + self.altura)
+
+     # ACTUALIZE ACA - VICKY
+      #n_dx = d_x / width
+      #n_up = d_up / height
+      #n_down = d_down / height
+      #n_vy = self.vy / 10
+      #self.volar = (self.w[0]+ self.w[1]*n_up+ self.w[2]*n_down+ self.w[3]*n_dx+ self.w[4]*n_vy) > 0
       self.volar= self.w[0]+self.w[1]*Dy + self.w[2]*(Dy**2) + self.w[3]*Dx + self.w[4]*(Dx**2) + self.w[5]*self.vy >0
       if self.volar and self.vy >= 0: #solo aletea si esta cayendo
         self.vy = flap_strength
