@@ -51,20 +51,14 @@ class Tubo:
         """Dibujo los tubos con sus imágenes"""
         # tubo de arriba
         imagen_arriba = pygame.transform.scale(
-            self.imagen_arriba_original, (self.ancho, self.altura_superior)
-        )
+            self.imagen_arriba_original, (self.ancho, self.altura_superior))
         pantalla.blit(imagen_arriba, (self.x, 0))
 
         # tubo de abajo
         altura_abajo = height - self.altura_inferior
         imagen_abajo = pygame.transform.scale(
-            self.imagen_abajo_original, (self.ancho, altura_abajo)
-        )
+            self.imagen_abajo_original, (self.ancho, altura_abajo) )
         pantalla.blit(imagen_abajo, (self.x, self.altura_inferior))
-
-        # para debug:
-        # pygame.draw.rect(pantalla, (0, 255, 0), self.rect_arriba, 2)
-        # pygame.draw.rect(pantalla, (0, 255, 0), self.rect_abajo, 2)
 
     def nuevos_tubos(self):
         """Elimina tubos viejos y crea nuevos a la derecha"""
@@ -129,21 +123,10 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        #if event.type == pygame.KEYDOWN:
-         #   if event.key == pygame.K_1:
-          #      scroll_speed = 1
-   #        # if event.key == pygame.K_2:
-    #            scroll_speed = 2
-     #       if event.key == pygame.K_3:
-      #          scroll_speed = 3
-       #     if event.key == pygame.K_4:
-        #        scroll_speed = 4
-         #   if event.key == pygame.K_5:
-          #      scroll_speed = 5
-
             # actualizar velocidad de tubos
             for tubo in tubos:
                 tubo.velocidad = scroll_speed
+
 
     #fondo se mueve
     fondo_x -= fondo_vel
@@ -229,9 +212,9 @@ while running:
     panel_x = width - panel_width
     pygame.draw.rect(screen, (0, 0, 0), (panel_x, 0, panel_width, height))
 
-    font_titulo = pygame.font.SysFont("Century Gothic", 24, bold=False)
-    titulo = font_titulo.render("GA Statistics", True, (250, 250, 250))
-    screen.blit(titulo, (panel_x + 20, 10))
+    font_titulo = pygame.font.SysFont("Century Gothic", 30, bold=False)
+    titulo = font_titulo.render("GA Statistics", True, (255, 197, 211))
+    screen.blit(titulo, (panel_x + 40, 10))
 
     font = pygame.font.SysFont("Arial", 14)
     texto = font.render(f"Generation: {generacion}", True, (250, 250, 250))
