@@ -28,18 +28,16 @@ class Tubo:
         self.x = posicion_x
         self.ancho = pipe_width
         self.velocidad = pipe_speed
-        self.gap = random.randint(190,220)
+        self.gap = random.randint(190,220) #el hueco de los tubos es aleatorio
 
         self.imagen_arriba_original = imagen_arriba
         self.imagen_abajo_original = imagen_abajo
         # altura de tubos
         self.altura_superior = random.randint(110, height - self.gap - 110)
         self.altura_inferior = self.altura_superior + self.gap
-        # rectángulos
+        # rectángulos(hitbox)
         self.rect_arriba = pygame.Rect(self.x, 0, self.ancho, self.altura_superior)
-        self.rect_abajo = pygame.Rect(
-            self.x, self.altura_inferior, self.ancho, height - self.altura_inferior
-        )
+        self.rect_abajo = pygame.Rect(self.x, self.altura_inferior, self.ancho, height - self.altura_inferior )
 
     def mover(self):
         """Mueve el tubo para la izquierda"""
@@ -50,14 +48,12 @@ class Tubo:
     def dibujar(self, pantalla):
         """Dibujo los tubos con sus imágenes"""
         # tubo de arriba
-        imagen_arriba = pygame.transform.scale(
-            self.imagen_arriba_original, (self.ancho, self.altura_superior))
+        imagen_arriba = pygame.transform.scale(self.imagen_arriba_original, (self.ancho, self.altura_superior))
         pantalla.blit(imagen_arriba, (self.x, 0))
 
         # tubo de abajo
         altura_abajo = height - self.altura_inferior
-        imagen_abajo = pygame.transform.scale(
-            self.imagen_abajo_original, (self.ancho, altura_abajo) )
+        imagen_abajo = pygame.transform.scale(self.imagen_abajo_original, (self.ancho, altura_abajo) )
         pantalla.blit(imagen_abajo, (self.x, self.altura_inferior))
 
     def nuevos_tubos(self):
@@ -96,7 +92,7 @@ playerY = 420
 vel_y = 0
 gravedad = 0.5
 
-#tubos
+#imagenes de tubos
 tubo_arriba = pygame.image.load("Imágenes/tubo arriba.png")
 tubo_abajo = pygame.image.load("Imágenes/TUBO ABAJO.png")
 
