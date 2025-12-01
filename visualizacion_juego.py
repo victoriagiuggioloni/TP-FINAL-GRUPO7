@@ -132,7 +132,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if fin_por_tiempo==True:
-            running=False
+            running=False   
         #if event.type == pygame.KEYDOWN:
          #   if event.key == pygame.K_1:
           #      scroll_speed = 1
@@ -146,8 +146,8 @@ while running:
           #      scroll_speed = 5
 
             # actualizar velocidad de tubos
-            for tubo in tubos:
-                tubo.velocidad = scroll_speed
+          #  for tubo in tubos:
+           #     tubo.velocidad = scroll_speed
 
     #fondo se mueve
     fondo_x -= fondo_vel
@@ -170,11 +170,11 @@ while running:
         coordt = (prox_tubo.x, prox_tubo.centro_del_hueco())
 
         #aleteo
-        pajaro.aletear(coordt)
+        
 
         #actualiza física
         pajaro.actualizar()
-
+        pajaro.aletear(coordt)
         #if pajaro.vida and pajaro.rendimiento >= tiempo_limite:
         #    if not pajaro.contado_para_max:
         #        pajaros_tiempo_max += 1
@@ -210,6 +210,7 @@ while running:
     if tiempo_vivo==tiempo_limite:
         if len(poblacion_viva)>= 1: ####
             fin_por_tiempo= True
+            print('hola')
         else:
             survivors_120s= len(poblacion_viva)
 
