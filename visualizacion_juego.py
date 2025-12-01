@@ -121,7 +121,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-<<<<<<< HEAD
         if fin_por_tiempo==True:
             running=False   
         #if event.type == pygame.KEYDOWN:
@@ -135,8 +134,6 @@ while running:
         #        scroll_speed = 4
          #   if event.key == pygame.K_5:
           #      scroll_speed = 5
-=======
->>>>>>> eef3f64f463fa8e103ab69916f9211251e43de1d
 
             # actualizar velocidad de tubos
           #  for tubo in tubos:
