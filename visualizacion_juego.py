@@ -29,18 +29,16 @@ class Tubo:
         self.x = posicion_x
         self.ancho = pipe_width
         self.velocidad = pipe_speed
-        self.gap = random.randint(190,220)
+        self.gap = random.randint(190,220) #el hueco de los tubos es aleatorio
 
         self.imagen_arriba_original = imagen_arriba
         self.imagen_abajo_original = imagen_abajo
         # altura de tubos
         self.altura_superior = random.randint(110, height - self.gap - 110)
         self.altura_inferior = self.altura_superior + self.gap
-        # rectángulos
+        # rectángulos(hitbox)
         self.rect_arriba = pygame.Rect(self.x, 0, self.ancho, self.altura_superior)
-        self.rect_abajo = pygame.Rect(
-            self.x, self.altura_inferior, self.ancho, height - self.altura_inferior
-        )
+        self.rect_abajo = pygame.Rect(self.x, self.altura_inferior, self.ancho, height - self.altura_inferior )
 
     def mover(self):
         """Mueve el tubo para la izquierda"""
@@ -51,21 +49,13 @@ class Tubo:
     def dibujar(self, pantalla):
         """Dibujo los tubos con sus imágenes"""
         # tubo de arriba
-        imagen_arriba = pygame.transform.scale(
-            self.imagen_arriba_original, (self.ancho, self.altura_superior)
-        )
+        imagen_arriba = pygame.transform.scale(self.imagen_arriba_original, (self.ancho, self.altura_superior))
         pantalla.blit(imagen_arriba, (self.x, 0))
 
         # tubo de abajo
         altura_abajo = height - self.altura_inferior
-        imagen_abajo = pygame.transform.scale(
-            self.imagen_abajo_original, (self.ancho, altura_abajo)
-        )
+        imagen_abajo = pygame.transform.scale(self.imagen_abajo_original, (self.ancho, altura_abajo) )
         pantalla.blit(imagen_abajo, (self.x, self.altura_inferior))
-
-        # para debug:
-        # pygame.draw.rect(pantalla, (0, 255, 0), self.rect_arriba, 2)
-        # pygame.draw.rect(pantalla, (0, 255, 0), self.rect_abajo, 2)
 
     def nuevos_tubos(self):
         """Elimina tubos viejos y crea nuevos a la derecha"""
@@ -103,7 +93,7 @@ playerY = 420
 vel_y = 0
 gravedad = 0.5
 
-#tubos
+#imagenes de tubos
 tubo_arriba = pygame.image.load("Imágenes/tubo arriba.png")
 tubo_abajo = pygame.image.load("Imágenes/TUBO ABAJO.png")
 
@@ -131,6 +121,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+<<<<<<< HEAD
         if fin_por_tiempo==True:
             running=False   
         #if event.type == pygame.KEYDOWN:
@@ -144,10 +135,13 @@ while running:
         #        scroll_speed = 4
          #   if event.key == pygame.K_5:
           #      scroll_speed = 5
+=======
+>>>>>>> eef3f64f463fa8e103ab69916f9211251e43de1d
 
             # actualizar velocidad de tubos
           #  for tubo in tubos:
            #     tubo.velocidad = scroll_speed
+
 
     #fondo se mueve
     fondo_x -= fondo_vel
@@ -245,9 +239,9 @@ while running:
     panel_x = width - panel_width
     pygame.draw.rect(screen, (0, 0, 0), (panel_x, 0, panel_width, height))
 
-    font_titulo = pygame.font.SysFont("Century Gothic", 24, bold=False)
-    titulo = font_titulo.render("GA Statistics", True, (250, 250, 250))
-    screen.blit(titulo, (panel_x + 20, 10))
+    font_titulo = pygame.font.SysFont("Century Gothic", 30, bold=False)
+    titulo = font_titulo.render("GA Statistics", True, (255, 197, 211))
+    screen.blit(titulo, (panel_x + 40, 10))
 
     font = pygame.font.SysFont("Arial", 14)
     texto = font.render(f"Generation: {generacion}", True, (250, 250, 250))

@@ -31,17 +31,7 @@ class Pajaro:
     def aletear(self, coordt): #coordp: self.coordp #coordt: posición del prox tubo(x, y del centro del hueco)
       Dx= abs(self.coordp[0]- coordt[0]) #distancia horizontal al tubo
       Dy= abs(self.coordp[1]- coordt[1]) #distancia vertical al hueco
-      #VICKY
-      #d_x = tubo.x - self.coordp[0]
-      #d_up = self.coordp[1] - tubo.altura_superior
-      #d_down = tubo.altura_inferior - (self.coordp[1] + self.altura)
-
-     # ACTUALIZE ACA - VICKY
-      #n_dx = d_x / width
-      #n_up = d_up / height
-      #n_down = d_down / height
-      #n_vy = self.vy / 10
-      #self.volar = (self.w[0]+ self.w[1]*n_up+ self.w[2]*n_down+ self.w[3]*n_dx+ self.w[4]*n_vy) > 0
+     
       #decide si aletear según los genes y las siguientes distancias:
       self.volar= self.w[0]+self.w[1]*Dy + self.w[2]*(Dy**2) + self.w[3]*Dx + self.w[4]*(Dx**2) + self.w[5]*self.vy >0
       if self.volar and self.vy >= 0: #solo aletea si volar = True o si está cayendo
