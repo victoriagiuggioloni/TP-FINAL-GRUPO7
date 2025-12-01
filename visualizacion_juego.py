@@ -17,6 +17,7 @@ fondo_vel = 1.5
 
 current_distance = 0
 average_distance = 0
+best_distance=0
 scroll_speed = 1
 speed = scroll_speed
 generacion=1
@@ -116,10 +117,12 @@ poblacion = Poblacion(None)
 #loop
 tiempo_vivo = 0
 max_tiempo_vivo = 0
+longest_survival=0
+survivors_120s= 0
 
 running = True
 pajaros_tiempo_max = 0
-tiempo_limite = 120 * 60 #límite de 120 segundos, termina el juego
+tiempo_limite = 20 * 60 #límite de 120 segundos, termina el juego
 fin_por_tiempo = False
 while running:
     
@@ -128,7 +131,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+        if fin_por_tiempo==True:
+            running=False
         #if event.type == pygame.KEYDOWN:
          #   if event.key == pygame.K_1:
           #      scroll_speed = 1
@@ -171,11 +175,11 @@ while running:
         #actualiza física
         pajaro.actualizar()
 
-        if pajaro.vida and pajaro.rendimiento >= tiempo_limite:
-            if not pajaro.contado_para_max:
-                pajaros_tiempo_max += 1
+        #if pajaro.vida and pajaro.rendimiento >= tiempo_limite:
+        #    if not pajaro.contado_para_max:
+        #        pajaros_tiempo_max += 1
             # opcional: marcarlo como ya contado para que no sume varias veces
-                pajaro.contado_para_max = True
+        #        pajaro.contado_para_max = True
 
         if not paso_tubo(pajaro, tubos, playerImg):
             pajaro.vida= False
@@ -201,6 +205,14 @@ while running:
         nueva_x = tubos[-1].x + pipe_distance
         tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))
 
+    poblacion_viva = [p for p in poblacion.pobl if p.vida]
+
+    if tiempo_vivo==tiempo_limite:
+        if len(poblacion_viva)>= 1: ####
+            fin_por_tiempo= True
+        else:
+            survivors_120s= len(poblacion_viva)
+
     if vivos== 0:
         # Reproducir voz "Next Generation"
         sonido_next_gen.play()
@@ -218,10 +230,13 @@ while running:
         generacion+=1
         if generacion > max_generaciones:
             running = False
-        max_tiempo_vivo = tiempo_vivo
-        tiempo_vivo = 0 
+        if tiempo_vivo>max_tiempo_vivo:
+            max_tiempo_vivo= tiempo_vivo
+        if current_distance> best_distance:
+            best_distance=current_distance
         #resteamos estadisticas para la nueva generacion
         current_distance=0
+        tiempo_vivo=0
         tubos= [Tubo(600, tubo_arriba, tubo_abajo), Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo),]
 
     #estadisiticas
@@ -252,14 +267,18 @@ while running:
 
     #Mejor Distancia
     mejor_distancia = max(p.rendimiento for p in poblacion.pobl)
-    texto = font.render(f"Best Distance: {mejor_distancia} ", True, (250, 250, 250))
+    texto = font.render(f"Best Distance: {best_distance} ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 180))
 
     texto = font.render(f"Current Survival: {tiempo_vivo / fps:.2f}s", True, (250,250,250))
     screen.blit(texto, (panel_x + 20, 220))
 
-    texto = font.render(f"Last Gen Survival: {max_tiempo_vivo / fps:.2f}s", True, (250,250,250))
+    texto = font.render(f"Best time: {max_tiempo_vivo/ fps:.2f}s", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 240))
+
+    texto = font.render(f"120s Survivors: {survivors_120s}", True, (250,250,250))
+    #texto = font.render(f"Last Gen Survival: {max_tiempo_vivo / fps:.2f}s", True, (250,250,250))
+    screen.blit(texto, (panel_x + 20, 260))
 
     #Diatncia promedio
     distancia = [p.rendimiento for p in poblacion.pobl]
@@ -272,7 +291,7 @@ while running:
     screen.blit(texto, (panel_x + 20, 200))
     clock.tick(fps)
 
-    dibujar_genoma(screen, poblacion.pobl, panel_x+20, 280)
+    dibujar_genoma(screen, poblacion_viva, panel_x+20, 300)
 
     pygame.display.update()
 
