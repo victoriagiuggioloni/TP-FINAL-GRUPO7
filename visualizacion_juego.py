@@ -70,23 +70,23 @@ class Tubo:
 
 pygame.init()
 clock = pygame.time.Clock()
-pygame.mixer.music.load("fondo_musica.mp3")
+pygame.mixer.music.load("Auxiliar/Musica/fondo_musica.mp3")
 pygame.mixer.music.play(-3) 
-sonido_next_gen = pygame.mixer.Sound("next_round.mp3")
+sonido_next_gen = pygame.mixer.Sound("Auxiliar/Musica/next_round.mp3")
 
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Angry Flappy Bird")
 
-icon = pygame.image.load("Imágenes/pajaro_icono.png")
+icon = pygame.image.load("Auxiliar/Imágenes/pajaro_icono.png")
 pygame.display.set_icon(icon)
 
-perdio = pygame.image.load("Imágenes/game_over.png")
+perdio = pygame.image.load("Auxiliar/Imágenes/game_over.png")
 game_over = False
 
-fondo = pygame.image.load("Imágenes/fondo.png")
+fondo = pygame.image.load("Auxiliar/Imágenes/fondo.png")
 
 #jugador
-playerImg = pygame.image.load("Imágenes/pajaro.png")
+playerImg = pygame.image.load("Auxiliar/Imágenes/pajaro.png")
 playerX = 120
 playerY = 420
 
@@ -94,8 +94,8 @@ vel_y = 0
 gravedad = 0.5
 
 #imagenes de tubos
-tubo_arriba = pygame.image.load("Imágenes/tubo arriba.png")
-tubo_abajo = pygame.image.load("Imágenes/TUBO ABAJO.png")
+tubo_arriba = pygame.image.load("Auxiliar/Imágenes/tubo arriba.png")
+tubo_abajo = pygame.image.load("Auxiliar/Imágenes/TUBO ABAJO.png")
 
 
 #primeros tres tubos
@@ -114,31 +114,14 @@ running = True
 pajaros_tiempo_max = 0
 tiempo_limite = 20 * 60 #límite de 120 segundos, termina el juego
 fin_por_tiempo = False
-while running:
-    
 
+while running:
     #eventos
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if fin_por_tiempo==True:
             running=False   
-        #if event.type == pygame.KEYDOWN:
-         #   if event.key == pygame.K_1:
-          #      scroll_speed = 1
-   #        # if event.key == pygame.K_2:
-    #            scroll_speed = 2
-     #       if event.key == pygame.K_3:
-      #          scroll_speed = 3
-       #     if event.key == pygame.K_4:
-        #        scroll_speed = 4
-         #   if event.key == pygame.K_5:
-          #      scroll_speed = 5
-
-            # actualizar velocidad de tubos
-          #  for tubo in tubos:
-           #     tubo.velocidad = scroll_speed
-
 
     #fondo se mueve
     fondo_x -= fondo_vel
@@ -148,53 +131,28 @@ while running:
     screen.blit(fondo, (fondo_x + width, 0))
 
     #pajaros 
-    vivos = 0  #contador de pájaros vivos
-
+    vivos = 0  #Contador de pájaros vivos
     for pajaro in poblacion.pobl:
         if not pajaro.vida:
-            continue  #ignoramos los muertos
-
+            continue  #Ignoramos los muertos
         vivos += 1
 
-        #el pajaro apunta al tubo
+        #El pajaro apunta al tubo:
         prox_tubo = tubos[0]
         coordt = (prox_tubo.x, prox_tubo.centro_del_hueco())
 
-        #aleteo
-        
-
-        #actualiza física
+        #Actualiza física:
         pajaro.actualizar()
+
+        #Aletear:
         pajaro.aletear(coordt)
-        #if pajaro.vida and pajaro.rendimiento >= tiempo_limite:
-        #    if not pajaro.contado_para_max:
-        #        pajaros_tiempo_max += 1
-            # opcional: marcarlo como ya contado para que no sume varias veces
-        #        pajaro.contado_para_max = True
 
         if not paso_tubo(pajaro, tubos, playerImg):
             pajaro.vida= False
-      
-        #si sigue vivo lo dibujo
+
+        #Si sigue vivo lo dibujo
         if pajaro.vida:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
-
-    if pajaros_tiempo_max >= 30:
-        running = False
-
-    if vivos > 0:
-        tiempo_vivo += 1
-
-    #tubos
-    for tubo in list(tubos):
-        tubo.mover()
-        tubo.dibujar(screen)
-
-    #reemplazo los tubos 
-    if tubos[0].nuevos_tubos():
-        tubos.pop(0)
-        nueva_x = tubos[-1].x + pipe_distance
-        tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))
 
     poblacion_viva = [p for p in poblacion.pobl if p.vida]
 
@@ -205,20 +163,30 @@ while running:
         else:
             survivors_120s= len(poblacion_viva)
 
-    if vivos== 0:
-        # Reproducir voz "Next Generation"
-        sonido_next_gen.play()
+    if vivos > 0:
+        tiempo_vivo += 1
 
+    #Tubos:
+    for tubo in list(tubos):
+        tubo.mover()
+        tubo.dibujar(screen)
 
-        # Esperar a que termine (1.5 segundos)
-        #pygame.time.delay(1500)
+    #Reemplazo los tubos:
+    if tubos[0].nuevos_tubos():
+        tubos.pop(0)
+        nueva_x = tubos[-1].x + pipe_distance
+        tubos.append(Tubo(nueva_x, tubo_arriba, tubo_abajo))
 
+    if vivos== 0: 
+        sonido_next_gen.play() #Reproducir voz "Next Generation"
 
+        #Creamos una nueva generación:
         mejores = poblacion.seleccion()
         nueva_gen= poblacion.cruzar(mejores)
         poblacion.pobl= nueva_gen
         poblacion.mutar()
 
+        #Actualizamos estadística del panel:
         generacion+=1
         if generacion > max_generaciones:
             running = False
@@ -226,12 +194,18 @@ while running:
             max_tiempo_vivo= tiempo_vivo
         if current_distance> best_distance:
             best_distance=current_distance
-        #resteamos estadisticas para la nueva generacion
+        #Diatncia promedio:
+        distancia = [p.rendimiento for p in poblacion.pobl]
+        if len(distancia) > 0:
+            promedio = sum(distancia) / len(distancia)
+        else:
+            promedio = 0
         current_distance=0
         tiempo_vivo=0
         tubos= [Tubo(600, tubo_arriba, tubo_abajo), Tubo(600 + pipe_distance, tubo_arriba, tubo_abajo), Tubo(600 + 2 * pipe_distance, tubo_arriba, tubo_abajo),]
 
-    #estadisiticas
+
+    #Estadisiticas:
     panel_width = 250
     panel_x = width - panel_width
     pygame.draw.rect(screen, (0, 0, 0), (panel_x, 0, panel_width, height))
@@ -257,7 +231,7 @@ while running:
     texto = font.render(f"Current Distance: {current_distance}", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 160))
 
-    #Mejor Distancia
+    #Mejor Distancia:
     mejor_distancia = max(p.rendimiento for p in poblacion.pobl)
     texto = font.render(f"Best Distance: {best_distance} ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 180))
@@ -271,13 +245,6 @@ while running:
     texto = font.render(f"120s Survivors: {survivors_120s}", True, (250,250,250))
     #texto = font.render(f"Last Gen Survival: {max_tiempo_vivo / fps:.2f}s", True, (250,250,250))
     screen.blit(texto, (panel_x + 20, 260))
-
-    #Diatncia promedio
-    distancia = [p.rendimiento for p in poblacion.pobl]
-    if len(distancia) > 0:
-        promedio = sum(distancia) / len(distancia)
-    else:
-        promedio = 0
         
     texto = font.render("Avg Distance: ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 200))
