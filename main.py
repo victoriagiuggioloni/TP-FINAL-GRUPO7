@@ -148,7 +148,7 @@ class Pajaro:
       self.y+= self.vy #actualiza la posicion vertical sumandole la velocidad vertical
       self.coordp[1]= self.y
 
-      if self.y <= 0 or self.y >= height - self.altura -30:
+      if self.y <= 0 or self.y >= height - self.altura * 2:
          self.morir() #comprueba si se salió de la pantalla
          self.vida = False #si sí entonces muere
          self.dead_image = pajaro_muerto_imagen(playerImg)
@@ -369,7 +369,6 @@ while running:
     for pajaro in poblacion.pobl:
         # Si está vivo, actualizamos física y decisión
         if pajaro.vida:
-            #vivos += 1
 
             #El pajaro apunta al tubo:
             prox_tubo = tubos[0]
@@ -388,9 +387,6 @@ while running:
             #Dibujo pajaro vivo a color:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
 
-            
-            
- 
     poblacion_viva = [p for p in poblacion.pobl if p.vida]
     vivos= len(poblacion_viva)
 
@@ -462,38 +458,34 @@ while running:
     texto = font.render(f"Generation:  {generacion}", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 60))
 
-    texto = font.render(f"Alives:  {len(poblacion_viva)}", True, (250, 250, 250))
+    texto = font.render(f"Alives:  {vivos}/100", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 80))
 
-    texto = font.render("Prev Gen 2min:  ", True, (250, 250, 250))
+    texto = font.render(f"Prev Gen 2min:  {survivors_120s}/100", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 100))
 
     texto = font.render(f"Speed:  {speed}X ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 120))
 
     current_distance += 1
-    texto = font.render(f"Current Distance:  {current_distance}", True, (250, 250, 250))
+    texto = font.render(f"Current Distance:  {current_distance}  fps", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 160))
 
     #Mejor Distancia:
     mejor_distancia = max(p.rendimiento for p in poblacion.pobl)
-    texto = font.render(f"Best Distance:  {best_distance} ", True, (250, 250, 250))
+    texto = font.render(f"Best Distance:  {best_distance}  fps", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 180))
+
+    texto = font.render(f"Avg Distance Prev. Gen:  {promedio}  fps", True, (250, 250, 250))
+    screen.blit(texto, (panel_x + 20, 200))
 
     texto = font.render(f"Current Survival:  {tiempo_vivo / fps:.2f}s", True, (250,250,250))
     screen.blit(texto, (panel_x + 20, 220))
 
     texto = font.render(f"Best time:  {max_tiempo_vivo/ fps:.2f}s", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 240))
-
-    texto = font.render(f"120s Survivors:  {survivors_120s}", True, (250,250,250))
-    #texto = font.render(f"Last Gen Survival: {max_tiempo_vivo / fps:.2f}s", True, (250,250,250))
-    screen.blit(texto, (panel_x + 20, 260))
-       
-    texto = font.render(f"Avg Distance Prev. Gen:  {promedio}", True, (250, 250, 250))
-    screen.blit(texto, (panel_x + 20, 200))
     
-    dibujar_genoma(screen, poblacion_viva, panel_x+20, 300)
+    dibujar_genoma(screen, poblacion_viva, panel_x+20, 280)
     
     clock.tick(fps)
     pygame.display.update()
