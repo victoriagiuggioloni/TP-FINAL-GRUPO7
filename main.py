@@ -14,7 +14,13 @@ pipe_distance = 480
 pipe_speed = 8
 
 #Funciones adicionales:
-def pajaro_muerto_imagen(image):
+def pajaro_muerto_imagen(image: pygame.Surface) -> pygame.Surface:
+    '''
+    Convierte una imagen de Pygame a blanco y negro.
+    Reduce su opacidad para simular visualmente que el pájaro está muerto.
+    Devuelve una nueva superficie con la nueva imagen en escala de grises y mayor transparencia.
+    '''
+
     # ancho (w) y el alto (h) de la imagen original
     w, h = image.get_size()
     #Creamos una nueva superficie vacía del mismo tamaño,
@@ -35,7 +41,21 @@ def pajaro_muerto_imagen(image):
     #imagen con escala de grises
     return gris
 
-def paso_tubo(pajaro, tubos, playerImg): #comprueba sie l pájaro choca algún tubo, si no choca entonces True
+def paso_tubo(pajaro:list, tubos:list, playerImg:pygame.Surface) -> bool:
+    '''
+    Comprueba si el pájaro choca con alguno de los tubos de la pantalla.
+
+
+    Crea un área de colisión (hitbox) ligeramente reducida alrededor del pájaro
+    para evitar falsos positivos y la compara con los rectángulos de los tubos
+    superiores e inferiores.
+
+
+    Devuelve: `True` si el pájaro no colisiona con ningún tubo, `False` si se detecta una colisión con el tubo.
+
+
+    '''
+    
     #player_hit = pygame.Rect(pajaro.coordp[0],pajaro.coordp[1],playerImg.get_width(),playerImg.get_height(),)
     player_hit = pygame.Rect(pajaro.coordp[0]+5, pajaro.coordp[1]+5, 
                          playerImg.get_width()-10, playerImg.get_height()-10) #reduce falsos positivos
@@ -45,9 +65,11 @@ def paso_tubo(pajaro, tubos, playerImg): #comprueba sie l pájaro choca algún t
             return False #como es True que se superponen rectángulos, devuelve Falseporque el pájaro NO pasó
     return True #si terminó el fro y no detectó colisiones/superposiciones devuelve True (el pájaro sí pasó)
 
-def dibujar_genoma(screen, poblacion, x, y):
+def dibujar_genoma(screen: pygame.Surface, poblacion: list, x: int, y: int) -> None:
     """
-    Dibuja barras simples mostrando el promedio de cada peso w0..w5
+    Dibuja en la pantalla barras horizontales que representan el valor promedio de cada peso W0 a W5 de la población actual de pájaros.
+    Utiliza colores verde para promedios positivos y rojo para negativos y muestra el valor numérico promedio al lado de cada barra.
+
     """
     fuente = pygame.font.SysFont("arial", 16) #crea fuente para escribir 
     ancho_max = 70 #largo horizontal máx de las barras
@@ -99,7 +121,11 @@ class Pajaro:
         self.dead = False                                        ############
         self.dead_image = None
 
-    def aletear(self, coordt): #coordp: self.coordp #coordt: posición del prox tubo(x, y del centro del hueco)
+    def aletear(self, coordt: tuple) -> None: 
+      '''
+      Decide si el pájaro debe aletear basándose en sus pesos y la posición del próximo tubo.
+      '''
+     #coordp: self.coordp #coordt: posición del prox tubo(x, y del centro del hueco)
       Dx= abs(self.coordp[0]- coordt[0]) #distancia horizontal al tubo
       Dy= abs(self.coordp[1]- coordt[1]) #distancia vertical al hueco
      
@@ -109,7 +135,11 @@ class Pajaro:
         #self.vy = flap_strength #usando sus genes y la posición del tubo, decide si aletear hacia arriba
         self.vy = self.flap_strength
 
-    def actualizar(self): #mueve al pájaro, aplica gravedad, actualiza fitness y verifica límites de la pantalla
+    def actualizar(self) -> None: 
+      '''
+      Aplica gravedad, mueve al pájaro, comprueba los límites de la pantalla y actualiza su rendimiento.
+      '''
+      
       if not self.vida: #si el pájaro murió, la función no ejecuta nada más (evita que pájaros muertos sigan cambiando la posición)
           return
       
@@ -125,7 +155,10 @@ class Pajaro:
       else:
          self.rendimiento += 1  #si no muere, fitness, sumamos distancia recorrdia frame a frame 
 
-    def morir(self):                        ################
+    def morir(self) -> None:      
+        '''
+        Marca el pájaro como muerto, detiene su actualización y cambia su imagen por una versión en escala de grises.
+        '''                          
         if self.dead:
             return #ya procesado
         self.vida = False
@@ -143,11 +176,18 @@ class Poblacion:
 
         self.pobl= pobl
 
-    def seleccion(self):
+    def seleccion(self) -> list:
+      """
+      Selecciona y devuelve los 30 mejores pájaros de la población actual basado en su rendimiento .
+      """
       mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :30] #ordena la pob de menor a mayor, toma los 30 mejores según su rendimiento
       return mejores 
 
-    def cruzar(self, mejores): #crea nueva generación mezclando los pesos de los mejores pájaros (mejores es la lista de los 15 padres)
+    def cruzar(self, mejores: list) ->list: 
+      """
+      Crea una nueva generación de 100 pájaros mediante cruce de los 30 pájaros seleccionados, usando selección por rango.
+      """
+      #crea nueva generación mezclando los pesos de los mejores pájaros (mejores es la lista de los 15 padres)
       nueva_gen=[] #lista vacía donde se almacenarán los hijos
       num_padres = len(mejores) # 30 padres
       pesos = list(range(num_padres, 0, -1)) #mayor probabilidad de que salga el mejor
@@ -171,7 +211,11 @@ class Poblacion:
       
       return nueva_gen #devuelve lista completa de nuevos 100 pajaros
 
-    def mutar(self): #aplica mutaciones aleatorias a la población
+    def mutar(self) -> None:
+      '''
+      Aplica mutaciones aleatorias a la población
+      '''
+        #aplica mutaciones aleatorias a la población
       for p in self.pobl: #para cada pájaro p en pobl
         for i in range(6): #recorre sus 6 pesos/genes
           if random.random() < 0.2: #cambia el peso con la prob del 20%
