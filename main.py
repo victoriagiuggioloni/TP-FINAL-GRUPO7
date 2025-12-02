@@ -8,10 +8,10 @@ gravedad = 0.5
 flap_strength = -7
 pipe_width = 80
 pipe_gap = random.randint (150, 260)
-pipe_speed = 6
 fps = 60
 pipe_distance = 480
 
+pipe_speed = 8
 
 #Funciones adicionales:
 def paso_tubo(pajaro, tubos, playerImg): #comprueba sie l pájaro choca algún tubo, si no choca entonces True
@@ -67,6 +67,7 @@ class Pajaro:
             for peso in range(6): 
                 w.append(round(random.uniform(-5, 5), 2)) #si no se pasa genes, se generan aleatorios
         self.w= w
+        self.flap_strength= flap_strength #
         self.vy= 0 #velocidad vertical empieza en cero
         self.y= 420
         self.coordp= [120, self.y]
@@ -82,12 +83,14 @@ class Pajaro:
       #decide si aletear según los genes y las siguientes distancias:
       self.volar= self.w[0]+self.w[1]*Dy + self.w[2]*(Dy**2) + self.w[3]*Dx + self.w[4]*(Dx**2) + self.w[5]*self.vy >0
       if self.volar and self.vy >= 0: #solo aletea si volar = True o si está cayendo
-        self.vy = flap_strength #usando sus genes y la posición del tubo, decide si aletear hacia arriba
+        #self.vy = flap_strength #usando sus genes y la posición del tubo, decide si aletear hacia arriba
+        self.vy = self.flap_strength
 
     def actualizar(self): #mueve al pájaro, aplica gravedad, actualiza fitness y verifica límites de la pantalla
       if not self.vida: #si el pájaro murió, la función no ejecuta nada más (evita que pájaros muertos sigan cambiando la posición)
           return
       
+      self.flap_strength= flap_strength
       self.vy += gravedad #aplica gravedad a la velocidad vertical
       self.y+= self.vy #actualiza la posicion vertical sumandole la velocidad vertical
       self.coordp[1]= self.y
@@ -112,15 +115,18 @@ class Poblacion:
 
     def cruzar(self, mejores): #crea nueva generación mezclando los pesos de los mejores pájaros (mejores es la lista de los 15 padres)
       nueva_gen=[] #lista vacía donde se almacenarán los hijos
-      for nuevo_p in range(100): #bucle crea 100 pájaros nuevos
-        w_hijo=[] #lista vacía con pesos del hijo
-        padre, madre= random.choices(mejores, k=2)   #elige aleatoriamente dos padres de la lista de los mejores
+      pesos = [p.rendimiento for p in mejores]
+      if sum(pesos) == 0:
+        pesos = [1] * len(mejores)
+      for _ in range(100):
+        w_hijo = []
+        padre, madre = random.choices(mejores, weights=pesos, k=2)  #elige aleatoriamente dos padres de la lista de los mejores
         for gen in range(6):  #recorre los 6 pesos del pajaro
-          if random.random()<0.5:
-             w_hijo.append(padre.w[gen]) #cruza genes de los 2 pájaros con 50% de prob
-          else:
-             w_hijo.append(madre.w[gen]) #cruza genes
-        
+            if random.random()<0.5:
+                w_hijo.append(padre.w[gen]) #cruza genes de los 2 pájaros con 50% de prob
+            else:
+                w_hijo.append(madre.w[gen]) #cruza genes
+            
         hijo= Pajaro(w_hijo) #crea hijo en base a la mezcla de genes
 
         hijo.rendimiento = 0
@@ -136,7 +142,7 @@ class Poblacion:
       for p in self.pobl: #para cada pájaro p en pobl
         for i in range(6): #recorre sus 6 pesos/genes
           if random.random() < 0.2: #cambia el peso con la prob del 20%
-              p.w[i]+=round(random.uniform(-0.2, 0.2), 2)  # mutación, añade pequeño valor aleatorio
+              p.w[i]+=round(random.uniform(-0.1, 0.1), 2)  # mutación, añade pequeño valor aleatorio
               p.w[i] = max(-2, min(1, p.w[i])) #asegura que el peso se mantenga dentro de un rango de -2 a 1
 
 class Tubo:
@@ -226,6 +232,8 @@ max_generaciones = 100
 tiempo_limite = 120 * 60 #límite de 120 segundos, termina el juego
 fin_por_tiempo = False
 vel_y = 0
+velocidad_maxima= 12
+
 
 #Variables de las estadísticas:
 tiempo_vivo = 0
@@ -242,6 +250,20 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False   
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                # Aumentas la variable pipe_speed
+                fps+=15
+                pipe_speed += 2
+                flap_strength-=1
+                gravedad+= 0.5
+                
+                # Controlas el límite: si se pasa de 8, vuelve a 6
+                if pipe_speed > velocidad_maxima:
+                    fps= 60
+                    pipe_speed = 6
+                    flap_strength=-7
+                    gravedad = 0.5
 
     #fondo se mueve
     fondo_x -= fondo_vel
@@ -288,6 +310,7 @@ while running:
 
     #Tubos:
     for tubo in list(tubos):
+        tubo.velocidad= pipe_speed
         tubo.mover()
         tubo.dibujar(screen)
 
