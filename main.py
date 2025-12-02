@@ -118,9 +118,10 @@ class Pajaro:
       self.y+= self.vy #actualiza la posicion vertical sumandole la velocidad vertical
       self.coordp[1]= self.y
 
-      if self.y <= 0 or self.y >= height - self.altura:
+      if self.y <= 0 or self.y >= height - self.altura -30:
          self.morir() #comprueba si se salió de la pantalla
-         #self.vida = False #si sí entonces muere
+         self.vida = False #si sí entonces muere
+         self.dead_image = pajaro_muerto_imagen(playerImg)
       else:
          self.rendimiento += 1  #si no muere, fitness, sumamos distancia recorrdia frame a frame 
 
@@ -130,7 +131,7 @@ class Pajaro:
         self.vida = False
         self.dead = True
         #Convertimos a gris:
-        self.dead_image = pajaro_muerto_imagen(playerImg)
+       # self.dead_image = pajaro_muerto_imagen(playerImg)
 
 
 class Poblacion:
@@ -143,14 +144,13 @@ class Poblacion:
         self.pobl= pobl
 
     def seleccion(self):
-      mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :15] #ordena la pob de menor a mayor, toma los 15 mejores según su rendimiento
+      mejores = sorted(self.pobl, key=lambda p: p.rendimiento, reverse=True)[ :30] #ordena la pob de menor a mayor, toma los 30 mejores según su rendimiento
       return mejores 
 
     def cruzar(self, mejores): #crea nueva generación mezclando los pesos de los mejores pájaros (mejores es la lista de los 15 padres)
       nueva_gen=[] #lista vacía donde se almacenarán los hijos
-      pesos = [p.rendimiento for p in mejores]
-      if sum(pesos) == 0:
-        pesos = [1] * len(mejores)
+      num_padres = len(mejores) # 30 padres
+      pesos = list(range(num_padres, 0, -1)) #mayor probabilidad de que salga el mejor
       for _ in range(100):
         w_hijo = []
         padre, madre = random.choices(mejores, weights=pesos, k=2)  #elige aleatoriamente dos padres de la lista de los mejores
@@ -290,6 +290,7 @@ while running:
                 pipe_speed += 2
                 flap_strength-=1
                 gravedad+= 0.5
+                speed+=1
                 
                 # Controlas el límite: si se pasa de 8, vuelve a 6
                 if pipe_speed > velocidad_maxima:
@@ -297,6 +298,7 @@ while running:
                     pipe_speed = 6
                     flap_strength=-7
                     gravedad = 0.5
+                    speed=1
 
     #fondo se mueve
     fondo_x -= fondo_vel
@@ -306,11 +308,17 @@ while running:
     screen.blit(fondo, (fondo_x + width, 0))
 
     #pajaros 
-    vivos = 0  #Contador de pájaros vivos
+    #vivos = 0  #Contador de pájaros vivos
+    for pajaro in poblacion.pobl:
+        if not pajaro.vida: #dibujamos los muertos
+            if pajaro.dead_image is None:
+                pajaro.dead_image = pajaro_muerto_imagen(playerImg)
+            screen.blit(pajaro.dead_image, (pajaro.coordp[0], pajaro.coordp[1]))
+
     for pajaro in poblacion.pobl:
         # Si está vivo, actualizamos física y decisión
         if pajaro.vida:
-            vivos += 1
+            #vivos += 1
 
             #El pajaro apunta al tubo:
             prox_tubo = tubos[0]
@@ -326,23 +334,33 @@ while running:
             if not paso_tubo(pajaro, tubos, playerImg):
                 pajaro.morir()
 
-        # Dibujado: si está vivo dibujo color, si murió dibujo gris (quieto)
-        if pajaro.vida:
+            #Dibujo pajaro vivo a color:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
-        elif pajaro.dead:
+
+        # Dibujado: si está vivo dibujo color, si murió dibujo gris (quieto)
+ #       if pajaro.vida:
+  #          screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
+   #     elif pajaro.dead:
+    #        # asegurate que dead_image exista (se crea en morir)
+     #       if pajaro.dead_image is None:
+      #          pajaro.dead_image = pajaro_muerto_imagen(playerImg)
+       #     screen.blit(pajaro.dead_image, (pajaro.coordp[0], pajaro.coordp[1]))
+
+        #if pajaro.vida: #dibujamos los vivos en un bucle aparte para que se dibujen por encima de los muertos
             # asegurate que dead_image exista (se crea en morir)
-            if pajaro.dead_image is None:
-                pajaro.dead_image = pajaro_muerto_imagen(playerImg)
-            screen.blit(pajaro.dead_image, (pajaro.coordp[0], pajaro.coordp[1]))
+            
+            
  
     poblacion_viva = [p for p in poblacion.pobl if p.vida]
+    vivos= len(poblacion_viva)
 
     if tiempo_vivo==tiempo_limite:
-        if len(poblacion_viva)>= 30: ####
+        if vivos>= 30: ####
             fin_por_tiempo= True
             print('hola')
         else:
-            survivors_120s= len(poblacion_viva)
+            if vivos> survivors_120s:
+                survivors_120s= len(poblacion_viva)
 
     if vivos > 0:
         tiempo_vivo += 1
@@ -404,13 +422,13 @@ while running:
     texto = font.render(f"Generation:  {generacion}", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 60))
 
-    texto = font.render(f"Alives:  {vivos}", True, (250, 250, 250))
+    texto = font.render(f"Alives:  {len(poblacion_viva)}", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 80))
 
     texto = font.render("Prev Gen 2min:  ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 100))
 
-    texto = font.render(f"Speed:  {scroll_speed}X ", True, (250, 250, 250))
+    texto = font.render(f"Speed:  {speed}X ", True, (250, 250, 250))
     screen.blit(texto, (panel_x + 20, 120))
 
     current_distance += 1
