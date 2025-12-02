@@ -1,6 +1,28 @@
 import random
 import pygame
 
+def pajaro_muerto_imagen(image):
+    # ancho (w) y el alto (h) de la imagen original
+    w, h = image.get_size()
+    #Creamos una nueva superficie vacía del mismo tamaño,
+    #con alpha (transparencia)
+    gris = pygame.Surface((w, h), pygame.SRCALPHA)
+    #Recorremos pixel por pixel
+    for x in range(w):
+        for y in range(h):
+            #color del pixel actual (r, g, b, a)
+            r, g, b, a = image.get_at((x, y))
+            #Calculamos el valor del pixel de color a escala de grises
+            #(rojo + verde + azul) // 3
+            v = (r + g + b) // 3
+            #Convertimos la imagen a la escala de grises y mantenemos transparencia
+            nuevo_alpha = int(a * 0.4)   #más transparente
+            gris.set_at((x, y), (v, v, v, nuevo_alpha))
+
+    #imagen con escala de grises
+    return gris
+
+
 #Variables fijas:
 height = 600
 width = 1000
@@ -75,6 +97,8 @@ class Pajaro:
         self.rendimiento= 0 #cuantos frames sobrevivio
         self.vida= True #indica si esta vivo
         self.altura = 34 #tamaño del pájaro para colisiones
+        self.dead = False                                        ############
+        self.dead_image = None
 
     def aletear(self, coordt): #coordp: self.coordp #coordt: posición del prox tubo(x, y del centro del hueco)
       Dx= abs(self.coordp[0]- coordt[0]) #distancia horizontal al tubo
@@ -95,10 +119,20 @@ class Pajaro:
       self.y+= self.vy #actualiza la posicion vertical sumandole la velocidad vertical
       self.coordp[1]= self.y
 
-      if self.y <= 0 or self.y >= height - self.altura: #comprueba si se salió de la pantalla
-         self.vida = False #si sí entonces muere
+      if self.y <= 0 or self.y >= height - self.altura:
+         self.morir() #comprueba si se salió de la pantalla
+         #self.vida = False #si sí entonces muere
       else:
          self.rendimiento += 1  #si no muere, fitness, sumamos distancia recorrdia frame a frame 
+
+    def morir(self):                        ################
+        if self.dead:
+            return #ya procesado
+        self.vida = False
+        self.dead = True
+        #Convertimos a gris:
+        self.dead_image = pajaro_muerto_imagen(playerImg)
+
 
 class Poblacion:
     def __init__(self, pobl):
@@ -275,27 +309,33 @@ while running:
     #pajaros 
     vivos = 0  #Contador de pájaros vivos
     for pajaro in poblacion.pobl:
-        if not pajaro.vida:
-            continue  #Ignoramos los muertos
-        vivos += 1
+        # Si está vivo, actualizamos física y decisión
+        if pajaro.vida:
+            vivos += 1
 
-        #El pajaro apunta al tubo:
-        prox_tubo = tubos[0]
-        coordt = (prox_tubo.x, prox_tubo.centro_del_hueco())
+            #El pajaro apunta al tubo:
+            prox_tubo = tubos[0]
+            coordt = (prox_tubo.x, prox_tubo.centro_del_hueco())
 
-        #Actualiza física:
-        pajaro.actualizar()
+            #Actualiza física:
+            pajaro.actualizar()
 
-        #Aletear:
-        pajaro.aletear(coordt)
+            #Aletear:
+            pajaro.aletear(coordt)
 
-        if not paso_tubo(pajaro, tubos, playerImg):
-            pajaro.vida= False
+            # Colisión:
+            if not paso_tubo(pajaro, tubos, playerImg):
+                pajaro.morir()
 
-        #Si sigue vivo lo dibujo
+        # Dibujado: si está vivo dibujo color, si murió dibujo gris (quieto)
         if pajaro.vida:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
-
+        elif pajaro.dead:
+            # asegurate que dead_image exista (se crea en morir)
+            if pajaro.dead_image is None:
+                pajaro.dead_image = pajaro_muerto_imagen(playerImg)
+            screen.blit(pajaro.dead_image, (pajaro.coordp[0], pajaro.coordp[1]))
+ 
     poblacion_viva = [p for p in poblacion.pobl if p.vida]
 
     if tiempo_vivo==tiempo_limite:
@@ -307,7 +347,7 @@ while running:
 
     if vivos > 0:
         tiempo_vivo += 1
-
+    
     #Tubos:
     for tubo in list(tubos):
         tubo.velocidad= pipe_speed
