@@ -239,14 +239,18 @@ class Tubo:
         self.rect_arriba = pygame.Rect(self.x, 0, self.ancho, self.altura_superior)
         self.rect_abajo = pygame.Rect(self.x, self.altura_inferior, self.ancho, height - self.altura_inferior )
 
-    def mover(self):
-        """Mueve el tubo para la izquierda"""
+    def mover(self) -> None:
+        """
+        Mueve el tubo para la izquierda
+        """
         self.x -= self.velocidad
         self.rect_arriba.x = int(self.x)
         self.rect_abajo.x = int(self.x)
 
     def dibujar(self, pantalla):
-        """Dibujo los tubos con sus imágenes"""
+        """
+        Dibujo los tubos con sus imágenes
+        """
         # tubo de arriba
         imagen_arriba = pygame.transform.scale(self.imagen_arriba_original, (self.ancho, self.altura_superior))
         pantalla.blit(imagen_arriba, (self.x, 0))
@@ -257,11 +261,15 @@ class Tubo:
         pantalla.blit(imagen_abajo, (self.x, self.altura_inferior))
 
     def nuevos_tubos(self):
-        """Elimina tubos viejos y crea nuevos a la derecha"""
+        """
+        Elimina tubos viejos y crea nuevos a la derecha
+        """
         return self.x + self.ancho < 2
 
     def centro_del_hueco(self):
-        """Devuelve la posición y del centro del hueco"""
+        """
+        Devuelve la posición y del centro del hueco
+        """
         return self.altura_superior + self.gap / 2
 
 
@@ -352,7 +360,6 @@ while running:
     screen.blit(fondo, (fondo_x + width, 0))
 
     #pajaros 
-    #vivos = 0  #Contador de pájaros vivos
     for pajaro in poblacion.pobl:
         if not pajaro.vida: #dibujamos los muertos
             if pajaro.dead_image is None:
@@ -381,17 +388,6 @@ while running:
             #Dibujo pajaro vivo a color:
             screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
 
-        # Dibujado: si está vivo dibujo color, si murió dibujo gris (quieto)
- #       if pajaro.vida:
-  #          screen.blit(playerImg, (pajaro.coordp[0], pajaro.coordp[1]))
-   #     elif pajaro.dead:
-    #        # asegurate que dead_image exista (se crea en morir)
-     #       if pajaro.dead_image is None:
-      #          pajaro.dead_image = pajaro_muerto_imagen(playerImg)
-       #     screen.blit(pajaro.dead_image, (pajaro.coordp[0], pajaro.coordp[1]))
-
-        #if pajaro.vida: #dibujamos los vivos en un bucle aparte para que se dibujen por encima de los muertos
-            # asegurate que dead_image exista (se crea en morir)
             
             
  
@@ -399,9 +395,9 @@ while running:
     vivos= len(poblacion_viva)
 
     if tiempo_vivo==tiempo_limite:
-        if vivos>= 30: ####
+        if vivos>= 30: 
             fin_por_tiempo= True
-            print('hola')
+            print(f"{generacion}")
         else:
             if vivos> survivors_120s:
                 survivors_120s= len(poblacion_viva)
