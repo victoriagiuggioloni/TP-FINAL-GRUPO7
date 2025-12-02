@@ -1,6 +1,19 @@
 import random
 import pygame
 
+#Variables fijas:
+height = 600
+width = 1000
+gravedad = 0.5
+flap_strength = -7
+pipe_width = 80
+pipe_gap = random.randint (150, 260)
+fps = 60
+pipe_distance = 480
+
+pipe_speed = 8
+
+#Funciones adicionales:
 def pajaro_muerto_imagen(image):
     # ancho (w) y el alto (h) de la imagen original
     w, h = image.get_size()
@@ -22,20 +35,6 @@ def pajaro_muerto_imagen(image):
     #imagen con escala de grises
     return gris
 
-
-#Variables fijas:
-height = 600
-width = 1000
-gravedad = 0.5
-flap_strength = -7
-pipe_width = 80
-pipe_gap = random.randint (150, 260)
-fps = 60
-pipe_distance = 480
-
-pipe_speed = 8
-
-#Funciones adicionales:
 def paso_tubo(pajaro, tubos, playerImg): #comprueba sie l pájaro choca algún tubo, si no choca entonces True
     #player_hit = pygame.Rect(pajaro.coordp[0],pajaro.coordp[1],playerImg.get_width(),playerImg.get_height(),)
     player_hit = pygame.Rect(pajaro.coordp[0]+5, pajaro.coordp[1]+5, 
