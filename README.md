@@ -38,10 +38,14 @@ Archivos:
     │   ├── tubo arriba.png
     │   └── TUBO ABAJO.png
     └── Musica/
-        ├── fondo_musica.mp3
-        └── next_round.mp3
+    │    ├── fondo_musica.mp3
+    │    └── next_round.mp3
     └── _pycache_ 
-        
+    │    ├──algoritmo.cpython-311.pyc
+    │    ├──algoritmo.cpython-313.pyc
+    │    ├──funciones.cpython-311.pyc
+    │    ├──funciones.cpython-313.pyc
+    │    ├──visualizacion_juego.cpython-311.pyc
     └── vscode
         ├──settings.json
     
