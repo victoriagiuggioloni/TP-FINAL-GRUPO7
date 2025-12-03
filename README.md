@@ -22,3 +22,24 @@ Etapas del algoritmo:
 2) Los pajaros juegan hasta morir.
 3) Se genera una seleccion de los mejores 15 pajaros de cada partida para luego seleccionar dos aletarioamente de esos 15 y generar mas generaciones.
 
+Requisitos
+Python 3.x (probado con 3.11)
+Pygame
+Instalación rápida: pip install pygame
+
+Archivos:
+.
+├── main.py
+└── Auxiliar/
+    ├── Imágenes/
+    │   ├── pajaro.png
+    │   ├── pajaro_icono.png
+    │   ├── fondo.png
+    │   ├── tubo arriba.png
+    │   └── TUBO ABAJO.png
+    └── Musica/
+        ├── fondo_musica.mp3
+        └── next_round.mp3
+
+
+
