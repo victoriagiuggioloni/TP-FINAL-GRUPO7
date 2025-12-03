@@ -40,6 +40,9 @@ Archivos:
     └── Musica/
         ├── fondo_musica.mp3
         └── next_round.mp3
+    └── _pycache_
+    └── vscode
+    
 
 
 
